@@ -31,7 +31,6 @@ namespace VRStandardAssets.ShootingGallery
         [SerializeField] private UIController m_UIController;           // Used to encapsulate the UI.
         [SerializeField] private InputWarnings m_InputWarnings;         // Tap warnings need to be on for the intro and outro but off for the game itself.
 
-
         private float m_SpawnProbability;                               // The current probability that a target will spawn at the next interval.
         private float m_ProbabilityDelta;                               // The difference to the probability caused by a target spawning or despawning.
 

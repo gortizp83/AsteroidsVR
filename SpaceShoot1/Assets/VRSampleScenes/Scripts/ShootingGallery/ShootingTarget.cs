@@ -21,7 +21,8 @@ namespace VRStandardAssets.ShootingGallery
         [SerializeField] private AudioClip m_DestroyClip;               // The audio clip to play when the target shatters.
         [SerializeField] private AudioClip m_SpawnClip;                 // The audio clip that plays when the target appears.
         [SerializeField] private AudioClip m_MissedClip;                // The audio clip that plays when the target disappears without being hit.
-
+        [SerializeField] private float m_TargetSpeed = 5;
+        [SerializeField] private float m_SpawnScale = 0.5f;
 
         private Transform m_CameraTransform;                            // Used to make sure the target is facing the camera.
         private VRInteractiveItem m_InteractiveItem;                    // Used to handle the user clicking whilst looking at the target.
@@ -33,7 +34,8 @@ namespace VRStandardAssets.ShootingGallery
         
         private void Update()
         {
-            this.transform.Translate(Vector3.forward * Time.deltaTime * 10);
+            this.transform.Translate(Vector3.forward * Time.deltaTime * m_TargetSpeed);
+            this.transform.localScale = new Vector3(m_SpawnScale, m_SpawnScale, m_SpawnScale);
         }
 
         private void Awake()
@@ -164,7 +166,7 @@ namespace VRStandardAssets.ShootingGallery
 
             // Instantiate the shattered target prefab in place of this target.
             GameObject destroyedTarget = Instantiate(m_DestroyPrefab, transform.position, transform.rotation) as GameObject;
-
+            destroyedTarget.transform.localScale = new Vector3(m_SpawnScale, m_SpawnScale, m_SpawnScale);
             // Destroy the shattered target after it's time out duration.
             Destroy(destroyedTarget, m_DestroyTimeOutDuration);
 
