@@ -23,15 +23,20 @@ namespace VRStandardAssets.ShootingGallery
         [SerializeField] private AudioClip m_MissedClip;                // The audio clip that plays when the target disappears without being hit.
         [SerializeField] private float m_TargetSpeed = 5;
         [SerializeField] private float m_SpawnScale = 0.5f;
+        [SerializeField] private int m_InitialLifePoints = 4;           // The number of shots the object needs to receive before exploting
+        [SerializeField] private Color m_HitColor = Color.red;          // The color of the object when hit.
 
         private Transform m_CameraTransform;                            // Used to make sure the target is facing the camera.
         private VRInteractiveItem m_InteractiveItem;                    // Used to handle the user clicking whilst looking at the target.
         private AudioSource m_Audio;                                    // Used to play the various audio clips.
         private Renderer m_Renderer;                                    // Used to make the target disappear before it is removed.
+        private MeshRenderer m_MeshRenderer;                            // Used to change the color of the target when hit.
         private Collider m_Collider;                                    // Used to make sure the target doesn't interupt other shots happening.
         private bool m_IsEnding;                                        // Whether the target is currently being removed by another source.
-        
-        
+        private int m_CurrentLifePoints;
+        private Color m_OriginalColor;
+
+
         private void Update()
         {
             this.transform.Translate(Vector3.forward * Time.deltaTime * m_TargetSpeed);
@@ -45,7 +50,10 @@ namespace VRStandardAssets.ShootingGallery
             m_Audio = GetComponent<AudioSource> ();
             m_InteractiveItem = GetComponent<VRInteractiveItem>();
             m_Renderer = GetComponent<Renderer>();
+            m_MeshRenderer = GetComponent<MeshRenderer>();
             m_Collider = GetComponent<Collider>();
+            m_CurrentLifePoints = m_InitialLifePoints;
+            m_OriginalColor =  m_MeshRenderer.material.color;
         }
 
 
@@ -73,6 +81,8 @@ namespace VRStandardAssets.ShootingGallery
             // When the target is spawned turn the visual and physical aspects on.
             m_Renderer.enabled = true;
             m_Collider.enabled = true;
+            m_CurrentLifePoints = m_InitialLifePoints;
+            m_MeshRenderer.material.color = m_OriginalColor;
 
             // Since the target has just spawned, it's not ending yet.
             m_IsEnding = false;
@@ -143,11 +153,26 @@ namespace VRStandardAssets.ShootingGallery
                 OnRemove (this);
         }
 
+        private IEnumerator TargetHit()
+        {
+            m_MeshRenderer.material.color = m_HitColor;
+
+            // Wait for the target to disappear naturally.
+            yield return new WaitForSeconds(0.1f);
+
+            m_MeshRenderer.material.color = m_OriginalColor;
+        }
+
 
         private void HandleDown()
         {
             // If it's already ending, do nothing else.
             if (m_IsEnding)
+                return;
+
+            StartCoroutine(TargetHit());
+
+            if (--m_CurrentLifePoints > 0)
                 return;
 
             // Otherwise this is ending the target's lifetime.
