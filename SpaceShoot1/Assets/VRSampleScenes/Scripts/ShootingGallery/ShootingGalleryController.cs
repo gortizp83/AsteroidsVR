@@ -30,6 +30,7 @@ namespace VRStandardAssets.ShootingGallery
         [SerializeField] private BoxCollider m_SpawnCollider;           // For the 180 shooter, the volume that the targets can spawn within.
         [SerializeField] private UIController m_UIController;           // Used to encapsulate the UI.
         [SerializeField] private InputWarnings m_InputWarnings;         // Tap warnings need to be on for the intro and outro but off for the game itself.
+        [SerializeField] private GameConfiguration m_GameConfiguration;
 
         private float m_SpawnProbability;                               // The current probability that a target will spawn at the next interval.
         private float m_ProbabilityDelta;                               // The difference to the probability caused by a target spawning or despawning.
@@ -51,15 +52,25 @@ namespace VRStandardAssets.ShootingGallery
             // Continue looping through all the phases.
             while (true)
             {
-                yield return StartCoroutine (StartPhase ());
-                yield return StartCoroutine (PlayPhase ());
-                yield return StartCoroutine (EndPhase ());
+                yield return StartCoroutine(StartPhase());
+                yield return StartCoroutine(PlayPhase());
+                yield return StartCoroutine(EndPhase());
             }
         }
 
+        private void UpdateLevelInfo()
+        {
+            var currentLevel = m_GameConfiguration.GetCurrentLevel();
+            var currentWave = currentLevel.GetCurrentWave();
+            SessionData.Level = currentLevel.LevelNumber;
+            SessionData.Wave = currentWave.WaveNumber;
+            SessionData.CurrentWaveGoals = currentWave.WaveGoals;
+        }
 
         private IEnumerator StartPhase ()
         {
+            UpdateLevelInfo();
+
             // Wait for the intro UI to fade in.
             yield return StartCoroutine (m_UIController.ShowIntroUI ());
 
@@ -110,11 +121,15 @@ namespace VRStandardAssets.ShootingGallery
 
         private IEnumerator EndPhase ()
         {
+            // TODO: send stats to ensure the player passed or failed the wave
+            PhaseResult result = m_GameConfiguration.FinishPhase(SessionData.Score);
+
             // Hide the reticle since the radial is about to be used.
             m_Reticle.Hide ();
             
             // In order, wait for the outro UI to fade in then wait for an additional delay.
-            yield return StartCoroutine (m_UIController.ShowOutroUI ());
+            yield return StartCoroutine (m_UIController.ShowOutroUI (result));
+            //yield return StartCoroutine(m_UIController.ShowOutroUI());
             yield return new WaitForSeconds(m_EndDelay);
             
             // Turn on the tap warnings.

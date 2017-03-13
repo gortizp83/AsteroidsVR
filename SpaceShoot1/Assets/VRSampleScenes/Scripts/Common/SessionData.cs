@@ -24,10 +24,67 @@ namespace VRStandardAssets.Common
         private static int s_Score;                                 // Used to store the current game's score.
         private static string s_CurrentGame;                        // The name of the current game type.
 
+        // Wave and level information
+        private static int s_Wave = 1;
+        private static int s_NumberOfWaves = 2;
+        private static int s_Level = 1;
+        private static string s_CurrentWaveGoals;
+
 
         public static int HighScore { get { return s_HighScore; } }
         public static int Score { get { return s_Score; } }
 
+        public static int Wave
+        {
+            get
+            {
+                return s_Wave;
+            }
+
+            set
+            {
+                s_Wave = value;
+            }
+        }
+
+        public static int NumberOfWaves
+        {
+            get
+            {
+                return s_NumberOfWaves;
+            }
+
+            set
+            {
+                s_NumberOfWaves = value;
+            }
+        }
+
+        public static int Level
+        {
+            get
+            {
+                return s_Level;
+            }
+
+            set
+            {
+                s_Level = value;
+            }
+        }
+
+        public static string CurrentWaveGoals
+        {
+            get
+            {
+                return s_CurrentWaveGoals;
+            }
+
+            set
+            {
+                s_CurrentWaveGoals = value;
+            }
+        }
 
         public static void SetGameType(GameType gameType)
         {

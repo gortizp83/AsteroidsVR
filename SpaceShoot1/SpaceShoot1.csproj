@@ -119,11 +119,15 @@
     <Compile Include="Assets\VRSampleScenes\Scripts\Menu\MenuButton.cs" />
     <Compile Include="Assets\VRSampleScenes\Scripts\Menu\MenuItemPopout.cs" />
     <Compile Include="Assets\VRSampleScenes\Scripts\Menu\MenuSelectorMover.cs" />
+    <Compile Include="Assets\VRSampleScenes\Scripts\ShootingGallery\GameConfiguration.cs" />
+    <Compile Include="Assets\VRSampleScenes\Scripts\ShootingGallery\LevelConfiguration.cs" />
     <Compile Include="Assets\VRSampleScenes\Scripts\ShootingGallery\ShootingGalleryController.cs" />
     <Compile Include="Assets\VRSampleScenes\Scripts\ShootingGallery\ShootingGalleryGun.cs" />
     <Compile Include="Assets\VRSampleScenes\Scripts\ShootingGallery\ShootingGalleryScore.cs" />
     <Compile Include="Assets\VRSampleScenes\Scripts\ShootingGallery\ShootingTarget.cs" />
     <Compile Include="Assets\VRSampleScenes\Scripts\ShootingGallery\UIController.cs" />
+    <Compile Include="Assets\VRSampleScenes\Scripts\ShootingGallery\WaveConfiguration.cs" />
+    <Compile Include="Assets\VRSampleScenes\Scripts\ShootingGallery\WaveResult.cs" />
     <Compile Include="Assets\VRSampleScenes\Scripts\Utils\GUIArrows.cs" />
     <Compile Include="Assets\VRSampleScenes\Scripts\Utils\InputWarnings.cs" />
     <Compile Include="Assets\VRSampleScenes\Scripts\Utils\ObjectPool.cs" />

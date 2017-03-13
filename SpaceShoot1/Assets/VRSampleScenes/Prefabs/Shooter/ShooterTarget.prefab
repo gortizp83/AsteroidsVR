@@ -361,12 +361,14 @@ MonoBehaviour:
   m_Score: 1
   m_TimeOutDuration: 3
   m_DestroyTimeOutDuration: 5
-  m_DestroyPrefab: {fileID: 199016, guid: 4a4908acf188e0344a6cec17a9f57cbe, type: 2}
+  m_DestroyPrefab: {fileID: 199016, guid: 890a09fdfa5815b4e82fb9cb28e6472f, type: 2}
   m_DestroyClip: {fileID: 8300000, guid: fd01d3e429819774181394d1ad09e6f2, type: 3}
   m_SpawnClip: {fileID: 8300000, guid: 906fabe377b8e8f4397285b9c752041a, type: 3}
   m_MissedClip: {fileID: 8300000, guid: ab3d0eee05f16c74db5adf795fb073d5, type: 3}
   m_TargetSpeed: 5
   m_SpawnScale: 0.25
+  m_InitialLifePoints: 4
+  m_HitColor: {r: 1, g: 0, b: 0, a: 1}
 --- !u!114 &11499314
 MonoBehaviour:
   m_ObjectHideFlags: 1

@@ -11,6 +11,7 @@
 *.userprefs
 
 /SpaceShoot1/Library
+/SpaceShoot1/Temp/
 
 # Build results
 [Dd]ebug/

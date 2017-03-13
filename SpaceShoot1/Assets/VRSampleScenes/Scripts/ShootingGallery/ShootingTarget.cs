@@ -25,6 +25,7 @@ namespace VRStandardAssets.ShootingGallery
         [SerializeField] private float m_SpawnScale = 0.5f;
         [SerializeField] private int m_InitialLifePoints = 4;           // The number of shots the object needs to receive before exploting
         [SerializeField] private Color m_HitColor = Color.red;          // The color of the object when hit.
+        [SerializeField] private Color m_InitialColor = Color.white;      // The color of the object when initialized.
 
         private Transform m_CameraTransform;                            // Used to make sure the target is facing the camera.
         private VRInteractiveItem m_InteractiveItem;                    // Used to handle the user clicking whilst looking at the target.
@@ -34,7 +35,6 @@ namespace VRStandardAssets.ShootingGallery
         private Collider m_Collider;                                    // Used to make sure the target doesn't interupt other shots happening.
         private bool m_IsEnding;                                        // Whether the target is currently being removed by another source.
         private int m_CurrentLifePoints;
-        private Color m_OriginalColor;
 
 
         private void Update()
@@ -53,7 +53,7 @@ namespace VRStandardAssets.ShootingGallery
             m_MeshRenderer = GetComponent<MeshRenderer>();
             m_Collider = GetComponent<Collider>();
             m_CurrentLifePoints = m_InitialLifePoints;
-            m_OriginalColor =  m_MeshRenderer.material.color;
+            m_MeshRenderer.material.color = m_InitialColor;
         }
 
 
@@ -82,7 +82,7 @@ namespace VRStandardAssets.ShootingGallery
             m_Renderer.enabled = true;
             m_Collider.enabled = true;
             m_CurrentLifePoints = m_InitialLifePoints;
-            m_MeshRenderer.material.color = m_OriginalColor;
+            m_MeshRenderer.material.color = m_InitialColor;
 
             // Since the target has just spawned, it's not ending yet.
             m_IsEnding = false;
@@ -160,7 +160,7 @@ namespace VRStandardAssets.ShootingGallery
             // Wait for the target to disappear naturally.
             yield return new WaitForSeconds(0.1f);
 
-            m_MeshRenderer.material.color = m_OriginalColor;
+            m_MeshRenderer.material.color = m_InitialColor;
         }
 
 
