@@ -18,7 +18,7 @@ GameObject:
   - component: {fileID: 8238864}
   - component: {fileID: 8238770}
   m_Layer: 0
-  m_Name: ShooterTarget
+  m_Name: ShooterTarget1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -359,7 +359,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Score: 1
-  m_TimeOutDuration: 3
   m_DestroyTimeOutDuration: 5
   m_DestroyPrefab: {fileID: 199016, guid: 890a09fdfa5815b4e82fb9cb28e6472f, type: 2}
   m_DestroyClip: {fileID: 8300000, guid: fd01d3e429819774181394d1ad09e6f2, type: 3}
@@ -367,8 +366,10 @@ MonoBehaviour:
   m_MissedClip: {fileID: 8300000, guid: ab3d0eee05f16c74db5adf795fb073d5, type: 3}
   m_TargetSpeed: 5
   m_SpawnScale: 0.25
-  m_InitialLifePoints: 4
+  m_InitialLifePoints: 1
   m_HitColor: {r: 1, g: 0, b: 0, a: 1}
+  m_InitialColor: {r: 1, g: 1, b: 1, a: 1}
+  m_TargetType: 0
 --- !u!114 &11499314
 MonoBehaviour:
   m_ObjectHideFlags: 1

@@ -1,10 +1,21 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
+using VRStandardAssets.ShootingGallery;
 
 public class WaveConfiguration : MonoBehaviour
 {
-    [SerializeField] private int m_WaveNumber;
-    [SerializeField] private string m_WaveGoals;
-    [SerializeField] private int m_MinScoreToPass = 10;
+    private int m_WaveNumber;
+    private string m_WaveGoals;
+    private int m_MinScoreToPass = 10;
+    private List<ShootingTarget.TargetType> m_targetSequence;
+
+    public WaveConfiguration(int waveNumber, int minScoreToPass, string waveGoals, List<ShootingTarget.TargetType> targetSequence)
+    {
+        m_WaveNumber = waveNumber;
+        m_MinScoreToPass = minScoreToPass;
+        m_WaveGoals = waveGoals;
+        m_targetSequence = targetSequence;
+    }
 
     public int WaveNumber
     {
@@ -20,9 +31,20 @@ public class WaveConfiguration : MonoBehaviour
 
     public int MinScoreToPass
     {
+        get { return m_MinScoreToPass; }
+        set { m_MinScoreToPass = value; }
+    }
+
+    public List<ShootingTarget.TargetType> TargetSequence
+    {
         get
         {
-            return m_MinScoreToPass;
+            return m_targetSequence;
+        }
+
+        set
+        {
+            m_targetSequence = value;
         }
     }
 }

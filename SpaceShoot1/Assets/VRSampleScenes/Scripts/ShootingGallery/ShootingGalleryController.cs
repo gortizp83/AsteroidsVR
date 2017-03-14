@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using VRStandardAssets.Common;
@@ -34,7 +35,9 @@ namespace VRStandardAssets.ShootingGallery
 
         private float m_SpawnProbability;                               // The current probability that a target will spawn at the next interval.
         private float m_ProbabilityDelta;                               // The difference to the probability caused by a target spawning or despawning.
+        private List<ShootingTarget.TargetType>.Enumerator m_TargetSequence;
 
+        private int m_OutstandingTargetCount = 0;
 
         public bool IsPlaying { get; private set; }                     // Whether or not the game is currently playing.
 
@@ -62,6 +65,7 @@ namespace VRStandardAssets.ShootingGallery
         {
             var currentLevel = m_GameConfiguration.GetCurrentLevel();
             var currentWave = currentLevel.GetCurrentWave();
+            m_TargetSequence = currentWave.TargetSequence.GetEnumerator();
             SessionData.Level = currentLevel.LevelNumber;
             SessionData.Wave = currentWave.WaveNumber;
             SessionData.CurrentWaveGoals = currentWave.WaveGoals;
@@ -175,7 +179,17 @@ namespace VRStandardAssets.ShootingGallery
                         m_SpawnProbability -= m_ProbabilityDelta;
 
                         // Spawn a target.
-                        Spawn (gameTimer);
+                        Spawn (gameTimer, m_TargetSequence.Current);
+
+                        if (!m_TargetSequence.MoveNext())
+                        {
+                            while(m_OutstandingTargetCount > 0)
+                            {
+                                // Wait until all the targets are either destroyed or out of the players view
+                                yield return null;
+                            }
+                            break;
+                        }
                     }
                 }
 
@@ -192,10 +206,12 @@ namespace VRStandardAssets.ShootingGallery
         }
 
 
-        private void Spawn (float timeRemaining)
+        private void Spawn (float timeRemaining, ShootingTarget.TargetType targetType)
         {
+            m_OutstandingTargetCount++;
+
             // Get a reference to a target instance from the object pool.
-            GameObject target = m_TargetObjectPool.GetGameObjectFromPool ();
+            GameObject target = m_TargetObjectPool.GetGameObjectFromPool (targetType);
 
             // Set the target's position to a random position. 
             target.transform.position = SpawnPosition();
@@ -242,6 +258,7 @@ namespace VRStandardAssets.ShootingGallery
 
         private void HandleTargetRemoved(ShootingTarget target)
         {
+            m_OutstandingTargetCount--;
             // Now that the event has been hit, unsubscribe from it.
             target.OnRemove -= HandleTargetRemoved;
 

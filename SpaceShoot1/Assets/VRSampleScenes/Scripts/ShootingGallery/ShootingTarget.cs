@@ -11,11 +11,20 @@ namespace VRStandardAssets.ShootingGallery
     // how long before it despawns.
     public class ShootingTarget : MonoBehaviour
     {
+        public enum TargetType
+        {
+            Easy,
+            Medium,
+            Hard,
+            EasyDouble,
+            MediumDouble,
+            HardDouble,
+        }
+
         public event Action<ShootingTarget> OnRemove;                   // This event is triggered when the target needs to be removed.
 
 
         [SerializeField] private int m_Score = 1;                       // This is the amount added to the users score when the target is hit.
-        [SerializeField] private float m_TimeOutDuration = 2f;          // How long the target lasts before it disappears.
         [SerializeField] private float m_DestroyTimeOutDuration = 2f;   // When the target is hit, it shatters.  This is how long before the shattered pieces disappear.
         [SerializeField] private GameObject m_DestroyPrefab;            // The prefab for the shattered target.
         [SerializeField] private AudioClip m_DestroyClip;               // The audio clip to play when the target shatters.
@@ -26,6 +35,7 @@ namespace VRStandardAssets.ShootingGallery
         [SerializeField] private int m_InitialLifePoints = 4;           // The number of shots the object needs to receive before exploting
         [SerializeField] private Color m_HitColor = Color.red;          // The color of the object when hit.
         [SerializeField] private Color m_InitialColor = Color.white;      // The color of the object when initialized.
+        [SerializeField] private TargetType m_TargetType = TargetType.Easy;
 
         private Transform m_CameraTransform;                            // Used to make sure the target is facing the camera.
         private VRInteractiveItem m_InteractiveItem;                    // Used to handle the user clicking whilst looking at the target.
@@ -36,11 +46,24 @@ namespace VRStandardAssets.ShootingGallery
         private bool m_IsEnding;                                        // Whether the target is currently being removed by another source.
         private int m_CurrentLifePoints;
 
+        public TargetType Type
+        {
+            get
+            {
+                return m_TargetType;
+            }
+        }
 
         private void Update()
         {
             this.transform.Translate(Vector3.forward * Time.deltaTime * m_TargetSpeed);
             this.transform.localScale = new Vector3(m_SpawnScale, m_SpawnScale, m_SpawnScale);
+
+            if (this.transform.position.z < 0)
+            {
+                // The target is out of range
+                StartCoroutine(MissTarget());
+            }
         }
 
         private void Awake()
@@ -94,9 +117,6 @@ namespace VRStandardAssets.ShootingGallery
             // Make sure the target is facing the camera.
             transform.LookAt(m_CameraTransform);
 
-            // Start the time out for when the target would naturally despawn.
-            StartCoroutine (MissTarget());
-
             // Start the time out for when the game ends.
             // Note this will only come into effect if the game time remaining is less than the time out duration.
             StartCoroutine (GameOver (gameTimeRemaining));
@@ -105,9 +125,6 @@ namespace VRStandardAssets.ShootingGallery
 
         private IEnumerator MissTarget()
         {
-            // Wait for the target to disappear naturally.
-            yield return new WaitForSeconds (m_TimeOutDuration);
-
             // If by this point it's already ending, do nothing else.
             if(m_IsEnding)
                 yield break;

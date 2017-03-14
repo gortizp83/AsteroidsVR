@@ -6,16 +6,13 @@ using VRStandardAssets.ShootingGallery;
 
 public class GameConfiguration : MonoBehaviour {
 
-    [SerializeField] LevelConfiguration[] m_Levels;
+    List<LevelConfiguration> m_Levels;
 
     private int m_levelIdx = 0;
 
-    public LevelConfiguration[] Levels
+    private void Awake()
     {
-        get
-        {
-            return m_Levels;
-        }
+        m_Levels = GameStatics.GetLevels();
     }
 
     public LevelConfiguration GetCurrentLevel()
@@ -29,7 +26,7 @@ public class GameConfiguration : MonoBehaviour {
 
         result.MinScoreToPass = GetCurrentLevel().GetCurrentWave().MinScoreToPass;
 
-        if (score > GetCurrentLevel().GetCurrentWave().MinScoreToPass)
+        if (score >= GetCurrentLevel().GetCurrentWave().MinScoreToPass)
         {
             result.Pass = true;
             result.Message = "Good job!";
@@ -52,7 +49,7 @@ public class GameConfiguration : MonoBehaviour {
             m_levelIdx++;
         }
 
-        if (m_levelIdx >= m_Levels.Length)
+        if (m_levelIdx >= m_Levels.Count)
         {
             // We don't have more levels! Return back to the last level to avoid crashes
             m_levelIdx--;

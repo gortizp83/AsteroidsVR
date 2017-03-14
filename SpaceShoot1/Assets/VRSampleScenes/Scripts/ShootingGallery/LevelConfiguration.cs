@@ -1,17 +1,17 @@
 ﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class LevelConfiguration : MonoBehaviour
 {
-    [SerializeField] private WaveConfiguration[] m_waveConfig;
-    [SerializeField] private int m_levelNumber;
+    private List<WaveConfiguration> m_waveConfig = new List<WaveConfiguration>();
+    private int m_levelNumber;
 
     private int m_waveIdx = 0;
 
-    public WaveConfiguration[] WaveConfig
+    public LevelConfiguration(int levelNumber)
     {
-        get { return m_waveConfig; }
-        set { m_waveConfig = value; }
+        m_levelNumber = levelNumber;
     }
 
     public int LevelNumber
@@ -20,14 +20,22 @@ public class LevelConfiguration : MonoBehaviour
         set { m_levelNumber = value; }
     }
 
+    public List<WaveConfiguration> WaveConfig
+    {
+        get
+        {
+            return m_waveConfig;
+        }
+    }
+
     public WaveConfiguration GetCurrentWave()
     {
-        return m_waveConfig[m_waveIdx];
+        return WaveConfig[m_waveIdx];
     }
 
     public bool TryMoveNextWave()
     {
-        if (m_waveIdx++ < m_waveConfig.Length)
+        if (m_waveIdx++ < WaveConfig.Count)
         {
             return true;
         }
