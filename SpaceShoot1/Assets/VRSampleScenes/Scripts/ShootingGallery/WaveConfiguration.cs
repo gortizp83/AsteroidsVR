@@ -7,9 +7,9 @@ public class WaveConfiguration : MonoBehaviour
     private int m_WaveNumber;
     private string m_WaveGoals;
     private int m_MinScoreToPass = 10;
-    private List<ShootingTarget.TargetType> m_targetSequence;
+    private List<TargetType> m_targetSequence;
 
-    public WaveConfiguration(int waveNumber, int minScoreToPass, string waveGoals, List<ShootingTarget.TargetType> targetSequence)
+    public WaveConfiguration(int waveNumber, int minScoreToPass, string waveGoals, List<TargetType> targetSequence)
     {
         m_WaveNumber = waveNumber;
         m_MinScoreToPass = minScoreToPass;
@@ -35,7 +35,7 @@ public class WaveConfiguration : MonoBehaviour
         set { m_MinScoreToPass = value; }
     }
 
-    public List<ShootingTarget.TargetType> TargetSequence
+    public List<TargetType> TargetSequence
     {
         get
         {

@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 using VRStandardAssets.ShootingGallery;
-using TargetType = VRStandardAssets.ShootingGallery.ShootingTarget.TargetType;
 
 namespace VRStandardAssets.Utils
 {

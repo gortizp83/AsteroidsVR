@@ -6,23 +6,22 @@ using VRStandardAssets.Utils;
 
 namespace VRStandardAssets.ShootingGallery
 {
+    public enum TargetType
+    {
+        Easy,
+        Medium,
+        Hard,
+        EasyDouble,
+        MediumDouble,
+        HardDouble,
+    }
+
     // This script handles a target in the shooter scenes.
     // It includes what should happen when it is hit and
     // how long before it despawns.
     public class ShootingTarget : MonoBehaviour
     {
-        public enum TargetType
-        {
-            Easy,
-            Medium,
-            Hard,
-            EasyDouble,
-            MediumDouble,
-            HardDouble,
-        }
-
         public event Action<ShootingTarget> OnRemove;                   // This event is triggered when the target needs to be removed.
-
 
         [SerializeField] private int m_Score = 1;                       // This is the amount added to the users score when the target is hit.
         [SerializeField] private float m_DestroyTimeOutDuration = 2f;   // When the target is hit, it shatters.  This is how long before the shattered pieces disappear.

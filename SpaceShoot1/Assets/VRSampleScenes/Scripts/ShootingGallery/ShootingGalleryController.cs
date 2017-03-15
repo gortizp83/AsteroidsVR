@@ -35,7 +35,7 @@ namespace VRStandardAssets.ShootingGallery
 
         private float m_SpawnProbability;                               // The current probability that a target will spawn at the next interval.
         private float m_ProbabilityDelta;                               // The difference to the probability caused by a target spawning or despawning.
-        private List<ShootingTarget.TargetType>.Enumerator m_TargetSequence;
+        private List<TargetType>.Enumerator m_TargetSequence;
 
         private int m_OutstandingTargetCount = 0;
 
@@ -206,7 +206,7 @@ namespace VRStandardAssets.ShootingGallery
         }
 
 
-        private void Spawn (float timeRemaining, ShootingTarget.TargetType targetType)
+        private void Spawn (float timeRemaining, TargetType targetType)
         {
             m_OutstandingTargetCount++;
 

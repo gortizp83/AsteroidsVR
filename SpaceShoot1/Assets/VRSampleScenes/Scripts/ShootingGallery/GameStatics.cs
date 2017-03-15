@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using TargetType = VRStandardAssets.ShootingGallery.ShootingTarget.TargetType;
+using VRStandardAssets.ShootingGallery;
 
 internal class GameStatics
 {
