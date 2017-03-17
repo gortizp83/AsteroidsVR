@@ -19,7 +19,7 @@ namespace VRStandardAssets.ShootingGallery
     // This script handles a target in the shooter scenes.
     // It includes what should happen when it is hit and
     // how long before it despawns.
-    public class ShootingTarget : MonoBehaviour
+    public class ShootingTarget : ShootingTargetBase
     {
         public event Action<ShootingTarget> OnRemove;                   // This event is triggered when the target needs to be removed.
 
@@ -31,7 +31,7 @@ namespace VRStandardAssets.ShootingGallery
         [SerializeField] private AudioClip m_MissedClip;                // The audio clip that plays when the target disappears without being hit.
         [SerializeField] private float m_TargetSpeed = 5;
         [SerializeField] private float m_SpawnScale = 0.5f;
-        [SerializeField] private int m_InitialLifePoints = 4;           // The number of shots the object needs to receive before exploting
+        [SerializeField] protected int m_InitialLifePoints = 4;           // The number of shots the object needs to receive before exploting
         [SerializeField] private Color m_HitColor = Color.red;          // The color of the object when hit.
         [SerializeField] private Color m_InitialColor = Color.white;      // The color of the object when initialized.
         [SerializeField] private TargetType m_TargetType = TargetType.Easy;
@@ -39,11 +39,12 @@ namespace VRStandardAssets.ShootingGallery
         private Transform m_CameraTransform;                            // Used to make sure the target is facing the camera.
         private VRInteractiveItem m_InteractiveItem;                    // Used to handle the user clicking whilst looking at the target.
         private AudioSource m_Audio;                                    // Used to play the various audio clips.
-        private Renderer m_Renderer;                                    // Used to make the target disappear before it is removed.
+        protected Renderer m_Renderer;                                    // Used to make the target disappear before it is removed.
         private MeshRenderer m_MeshRenderer;                            // Used to change the color of the target when hit.
-        private Collider m_Collider;                                    // Used to make sure the target doesn't interupt other shots happening.
+        protected Collider m_Collider;                                    // Used to make sure the target doesn't interupt other shots happening.
         private bool m_IsEnding;                                        // Whether the target is currently being removed by another source.
-        private int m_CurrentLifePoints;
+        protected int m_CurrentLifePoints;
+        private bool m_IgnoreHit = false;
 
         public TargetType Type
         {
@@ -53,9 +54,41 @@ namespace VRStandardAssets.ShootingGallery
             }
         }
 
+        public bool IgnoreHit
+        {
+            get
+            {
+                return m_IgnoreHit;
+            }
+
+            set
+            {
+                m_IgnoreHit = value;
+            }
+        }
+
+        public float TargetSpeed
+        {
+            get
+            {
+                return m_TargetSpeed;
+            }
+
+            set
+            {
+                m_TargetSpeed = value;
+            }
+        }
+
         private void Update()
         {
-            this.transform.Translate(Vector3.forward * Time.deltaTime * m_TargetSpeed);
+            DoUpdate();
+        }
+
+        public override void DoUpdate()
+        {
+            this.transform.Translate(Vector3.forward * Time.deltaTime * TargetSpeed);
+
             this.transform.localScale = new Vector3(m_SpawnScale, m_SpawnScale, m_SpawnScale);
 
             if (this.transform.position.z < 0)
@@ -65,7 +98,7 @@ namespace VRStandardAssets.ShootingGallery
             }
         }
 
-        private void Awake()
+        protected void Awake()
         {
             // Setup the references.
             m_CameraTransform = Camera.main.transform;
@@ -77,7 +110,6 @@ namespace VRStandardAssets.ShootingGallery
             m_CurrentLifePoints = m_InitialLifePoints;
             m_MeshRenderer.material.color = m_InitialColor;
         }
-
 
         private void OnEnable ()
         {
@@ -96,9 +128,8 @@ namespace VRStandardAssets.ShootingGallery
             // Ensure the event is completely unsubscribed when the target is destroyed.
             OnRemove = null;
         }
-        
 
-        public void Restart (float gameTimeRemaining)
+        public override void Restart (float gameTimeRemaining)
         {
             // When the target is spawned turn the visual and physical aspects on.
             m_Renderer.enabled = true;
@@ -169,7 +200,7 @@ namespace VRStandardAssets.ShootingGallery
                 OnRemove (this);
         }
 
-        private IEnumerator TargetHit()
+        public IEnumerator TargetHit()
         {
             m_MeshRenderer.material.color = m_HitColor;
 
@@ -180,8 +211,11 @@ namespace VRStandardAssets.ShootingGallery
         }
 
 
-        private void HandleDown()
+        protected override void HandleDown()
         {
+            if (IgnoreHit)
+                return;
+
             // If it's already ending, do nothing else.
             if (m_IsEnding)
                 return;
@@ -198,22 +232,27 @@ namespace VRStandardAssets.ShootingGallery
             m_Renderer.enabled = false;
             m_Collider.enabled = false;
 
+            // Add to the player's score.
+            SessionData.AddScore(m_Score);
+
+            PlayTargetDestroy();
+
+            // Tell subscribers that this target is ready to be removed.
+            if (OnRemove != null)
+                OnRemove(this);
+        }
+
+        protected void PlayTargetDestroy()
+        {
             // Play the clip of the target being hit.
             m_Audio.clip = m_DestroyClip;
             m_Audio.Play();
-
-            // Add to the player's score.
-            SessionData.AddScore(m_Score);
 
             // Instantiate the shattered target prefab in place of this target.
             GameObject destroyedTarget = Instantiate(m_DestroyPrefab, transform.position, transform.rotation) as GameObject;
             destroyedTarget.transform.localScale = new Vector3(m_SpawnScale, m_SpawnScale, m_SpawnScale);
             // Destroy the shattered target after it's time out duration.
             Destroy(destroyedTarget, m_DestroyTimeOutDuration);
-
-            // Tell subscribers that this target is ready to be removed.
-            if (OnRemove != null)
-                OnRemove(this);
         }
     }
 }

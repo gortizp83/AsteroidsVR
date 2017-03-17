@@ -18,7 +18,7 @@ GameObject:
   - component: {fileID: 8238864}
   - component: {fileID: 8238770}
   m_Layer: 0
-  m_Name: ShooterTarget4
+  m_Name: ShooterTarget 4
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -369,7 +369,7 @@ MonoBehaviour:
   m_InitialLifePoints: 4
   m_HitColor: {r: 1, g: 0, b: 0, a: 1}
   m_InitialColor: {r: 0.78676474, g: 0.43950307, b: 0, a: 1}
-  m_TargetType: 0
+  m_TargetType: 1
 --- !u!114 &11499314
 MonoBehaviour:
   m_ObjectHideFlags: 1

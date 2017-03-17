@@ -12,7 +12,7 @@ internal class GameStatics
         var levels = new List<LevelConfiguration>();
         // Level 1
         LevelConfiguration level1 = new LevelConfiguration(levelCount++);
-        List<TargetType> sequence = new List<TargetType> { TargetType.Easy, TargetType.Easy, TargetType.Easy, TargetType.Easy, TargetType.Easy, TargetType.Easy, TargetType.Easy, TargetType.Easy, TargetType.Easy, TargetType.Easy };
+        List<TargetType> sequence = new List<TargetType> { TargetType.HardDouble, TargetType.Easy, TargetType.Easy, TargetType.Easy, TargetType.Easy, TargetType.Easy, TargetType.Easy, TargetType.Easy, TargetType.Easy, TargetType.Easy };
         level1.WaveConfig.Add( new WaveConfiguration(waveCounter++, 10, "destroy at last 10 asteroids", sequence));
 
         sequence = new List<TargetType> { TargetType.Easy, TargetType.Medium, TargetType.Easy, TargetType.Hard };

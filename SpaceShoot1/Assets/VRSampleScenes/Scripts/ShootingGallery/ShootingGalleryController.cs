@@ -66,6 +66,8 @@ namespace VRStandardAssets.ShootingGallery
             var currentLevel = m_GameConfiguration.GetCurrentLevel();
             var currentWave = currentLevel.GetCurrentWave();
             m_TargetSequence = currentWave.TargetSequence.GetEnumerator();
+            m_TargetSequence.MoveNext();
+
             SessionData.Level = currentLevel.LevelNumber;
             SessionData.Wave = currentWave.WaveNumber;
             SessionData.CurrentWaveGoals = currentWave.WaveGoals;
@@ -204,8 +206,7 @@ namespace VRStandardAssets.ShootingGallery
                 m_TimerBar.fillAmount = gameTimer / m_GameLength;
             }
         }
-
-
+        
         private void Spawn (float timeRemaining, TargetType targetType)
         {
             m_OutstandingTargetCount++;
