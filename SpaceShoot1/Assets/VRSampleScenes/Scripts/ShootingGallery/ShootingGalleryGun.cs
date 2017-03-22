@@ -22,9 +22,6 @@ namespace VRStandardAssets.ShootingGallery
         [SerializeField] private Transform m_GunEnd;                                    // This is where the line renderer should start from.
         [SerializeField] private LineRenderer m_GunFlare;                               // This is used to display the gun as a laser.
         [SerializeField] private Reticle m_Reticle;                                     // This is what the gun arm should be aiming at.
-        [SerializeField] private ParticleSystem m_FlareParticles;                       // This particle system plays when the gun fires.
-        [SerializeField] private GameObject[] m_FlareMeshes;                            // These are meshes of which one is randomly activated when the gun fires.
-
 
         private const float k_DampingCoef = -20f;                                       // This is the coefficient used to ensure smooth damping of this gameobject.
 
@@ -94,20 +91,6 @@ namespace VRStandardAssets.ShootingGallery
             if (target)
                 lineLength = Vector3.Distance (m_GunEnd.position, target.position);
 
-            // Chose an index for a random flare mesh.
-            int randomFlareIndex = Random.Range (0, m_FlareMeshes.Length);
-
-            // Store the rotation of that random flare and set it randomly rotate around the z axis.
-            Vector3 randomEulerRotation = m_FlareMeshes[randomFlareIndex].transform.eulerAngles;
-            randomEulerRotation.z = Random.Range (0f, 360f);
-
-            // Set the random rotation that has been stored back to the flare and turn it on.
-            m_FlareMeshes[randomFlareIndex].transform.eulerAngles = randomEulerRotation;
-            m_FlareMeshes[randomFlareIndex].SetActive (true);
-
-            // Play the particle system for the gun.
-            m_FlareParticles.Play();
-
             // Turn the line renderer on.
             m_GunFlare.enabled = true;
             
@@ -116,10 +99,6 @@ namespace VRStandardAssets.ShootingGallery
             
             // Turn the line renderer off again.
             m_GunFlare.enabled = false;
-
-            // Turn the random flare mesh off.
-            m_FlareMeshes[randomFlareIndex].SetActive(false);
-
         }
 
 
