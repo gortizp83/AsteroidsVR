@@ -2,7 +2,7 @@
 using UnityEngine;
 using VRStandardAssets.ShootingGallery;
 
-public class WaveConfiguration : MonoBehaviour
+public class WaveConfiguration
 {
     private int m_WaveNumber;
     private string m_WaveGoals;

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class LevelConfiguration : MonoBehaviour
+public class LevelConfiguration
 {
     private List<WaveConfiguration> m_waveConfig = new List<WaveConfiguration>();
     private int m_levelNumber;
