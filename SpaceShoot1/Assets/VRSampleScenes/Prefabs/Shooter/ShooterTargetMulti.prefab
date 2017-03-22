@@ -1107,7 +1107,7 @@ MonoBehaviour:
   m_MissedClip: {fileID: 8300000, guid: ab3d0eee05f16c74db5adf795fb073d5, type: 3}
   m_TargetSpeed: -2
   m_SpawnScale: 0.125
-  m_InitialLifePoints: 4
+  m_InitialLifePoints: 1
   m_HitColor: {r: 1, g: 0, b: 0, a: 1}
   m_InitialColor: {r: 0.94198745, g: 0.95910823, b: 0.97794116, a: 1}
   m_TargetType: 5
