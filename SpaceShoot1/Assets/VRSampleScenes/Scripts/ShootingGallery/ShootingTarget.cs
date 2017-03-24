@@ -231,9 +231,9 @@ namespace VRStandardAssets.ShootingGallery
             // Turn off the visual and physical aspects.
             m_Renderer.enabled = false;
             m_Collider.enabled = false;
-
+            
             // Add to the player's score.
-            SessionData.AddScore(m_Score);
+            SessionData.AddScore(this.GetComponent<ShootingTarget>().Type);
 
             PlayTargetDestroy();
 

@@ -42,7 +42,7 @@ namespace VRStandardAssets.ShootingGallery
         public IEnumerator ShowOutroUI()
         {
             m_TotalScore.text = SessionData.Score.ToString();
-            m_EndOfWaveMessage.text = SessionData.HighScore.ToString();
+            m_EndOfWaveMessage.text = "Game is ending";
 
             yield return StartCoroutine(m_OutroUI.InteruptAndFadeIn());
         }

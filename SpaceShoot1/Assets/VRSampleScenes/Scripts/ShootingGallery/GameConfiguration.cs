@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using VRStandardAssets.Common;
 using VRStandardAssets.ShootingGallery;
 
 public class GameConfiguration : MonoBehaviour {
@@ -20,7 +21,7 @@ public class GameConfiguration : MonoBehaviour {
         return m_Levels[m_levelIdx];
     }
 
-    internal PhaseResult FinishPhase(int score)
+    internal PhaseResult FinishPhase(GameScore score)
     {
         PhaseResult result = new PhaseResult();
 

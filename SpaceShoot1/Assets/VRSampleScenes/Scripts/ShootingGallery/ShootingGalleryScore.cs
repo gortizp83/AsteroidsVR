@@ -8,12 +8,19 @@ namespace VRStandardAssets.ShootingGallery
     // shooter scenes.
     public class ShootingGalleryScore : MonoBehaviour
     {
-        [SerializeField] private Text m_ScoreText;
-
+        [SerializeField] private ScoreUI[] m_ScoreUI;
 
         private void Update()
         {
-            m_ScoreText.text = SessionData.Score.ToString();
+            foreach (var scoreUI in m_ScoreUI)
+            {
+                var targetType = scoreUI.TargetType;
+                scoreUI.ScoreText.text = SessionData.Score.GetScore(targetType).ToString();
+                // Set the timer bar to be filled by the amount 
+                float score = SessionData.Score.GetScore(targetType);
+                float minScoreToPass = SessionData.MinScoreToPassWave.GetScore(targetType);
+                scoreUI.TimerBar.fillAmount = score / minScoreToPass;
+            }
         }
     }
 }

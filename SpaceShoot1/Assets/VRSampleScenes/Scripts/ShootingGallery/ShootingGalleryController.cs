@@ -19,14 +19,10 @@ namespace VRStandardAssets.ShootingGallery
         [SerializeField] private float m_GameLength = 60f;              // Time a game lasts in seconds.
         [SerializeField] private float m_SpawnInterval = 1f;            // How frequently a target could spawn.
         [SerializeField] private float m_EndDelay = 1.5f;               // The time the user needs to wait between the outro UI and being able to continue.
-        [SerializeField] private float m_SphereSpawnInnerRadius = 5f;   // For the 360 shooter, the nearest targets can spawn.
-        [SerializeField] private float m_SphereSpawnOuterRadius = 10f;  // For the 360 shooter, the furthest targets can spawn.
-        [SerializeField] private float m_SphereSpawnMaxHeight = 15f;    // For the 360 shooter, the highest targets can spawn.
         [SerializeField] private SelectionSlider m_SelectionSlider;     // Used to confirm the user has understood the intro UI.
         [SerializeField] private Transform m_Camera;                    // Used to determine where targets can spawn.
         [SerializeField] private SelectionRadial m_SelectionRadial;     // Used to continue past the outro.
         [SerializeField] private Reticle m_Reticle;                     // This is turned on and off when it is required and not.
-        [SerializeField] private Image m_TimerBar;                      // The time remaining is shown on the UI for the gun, this is a reference to the image showing the time remaining.
         [SerializeField] private ObjectPool m_TargetObjectPool;         // The object pool that stores all the targets.
         [SerializeField] private BoxCollider m_SpawnCollider;           // For the 180 shooter, the volume that the targets can spawn within.
         [SerializeField] private UIController m_UIController;           // Used to encapsulate the UI.
@@ -45,7 +41,7 @@ namespace VRStandardAssets.ShootingGallery
         private IEnumerator Start()
         {
             // Set the game type for the score to be recorded correctly.
-            SessionData.SetGameType(m_GameType);
+            SessionData.Restart();
 
             // The probability difference for each spawn is difference between 100% and the base probabilty per the number or targets wanted.
             // That means that if the ideal number of targets was 5, the base probability was 0.7 then the delta is 0.06.
@@ -71,6 +67,7 @@ namespace VRStandardAssets.ShootingGallery
             SessionData.Level = currentLevel.LevelNumber;
             SessionData.Wave = currentWave.WaveNumber;
             SessionData.CurrentWaveGoals = currentWave.WaveGoals;
+            SessionData.MinScoreToPassWave = currentWave.MinScoreToPass;
         }
 
         private IEnumerator StartPhase ()
@@ -201,9 +198,6 @@ namespace VRStandardAssets.ShootingGallery
                 // Decrease the timers by the time that was waited.
                 gameTimer -= Time.deltaTime;
                 spawnTimer -= Time.deltaTime;
-
-                // Set the timer bar to be filled by the amount 
-                m_TimerBar.fillAmount = gameTimer / m_GameLength;
             }
         }
         
@@ -228,32 +222,17 @@ namespace VRStandardAssets.ShootingGallery
 
         private Vector3 SpawnPosition ()
         {
-            // If this game is a 180 game then the random spawn position should be within the given collider.
-            if (m_GameType == SessionData.GameType.SHOOTER180)
-            {
-                // Find the centre and extents of the spawn collider.
-                Vector3 center = m_SpawnCollider.bounds.center;
-                Vector3 extents = m_SpawnCollider.bounds.extents;
+            // Find the centre and extents of the spawn collider.
+            Vector3 center = m_SpawnCollider.bounds.center;
+            Vector3 extents = m_SpawnCollider.bounds.extents;
 
-                // Get a random value between the extents on each axis.
-                float x = Random.Range(center.x - extents.x, center.x + extents.x);
-                float y = Random.Range(center.y - extents.y, center.y + extents.y);
-                float z = Random.Range(center.z - extents.z, center.z + extents.z);
-                
-                // Return the point these random values make.
-                return new Vector3(x, y, z);
-            }
+            // Get a random value between the extents on each axis.
+            float x = Random.Range(center.x - extents.x, center.x + extents.x);
+            float y = Random.Range(center.y - extents.y, center.y + extents.y);
+            float z = Random.Range(center.z - extents.z, center.z + extents.z);
 
-            // Otherwise the game is 360 and the spawn should be within a cylinder shape.
-            // Find a random point on a unit circle and give it a radius between the inner and outer radii.
-            Vector2 randomCirclePoint = Random.insideUnitCircle.normalized *
-                                  Random.Range (m_SphereSpawnInnerRadius, m_SphereSpawnOuterRadius);
-
-            // Find a random height between the camera's height and the maximum.
-            float randomHeight = Random.Range (m_Camera.position.y, m_SphereSpawnMaxHeight);
-
-            // The the random point on the circle is on the XZ plane and the random height is the Y axis.
-            return new Vector3(randomCirclePoint.x, randomHeight, randomCirclePoint.y);
+            // Return the point these random values make.
+            return new Vector3(x, y, z);
         }
 
 

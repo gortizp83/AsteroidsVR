@@ -1,15 +1,16 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
+using VRStandardAssets.Common;
 using VRStandardAssets.ShootingGallery;
 
 public class WaveConfiguration
 {
     private int m_WaveNumber;
     private string m_WaveGoals;
-    private int m_MinScoreToPass = 10;
+    private GameScore m_MinScoreToPass;
     private List<TargetType> m_targetSequence;
 
-    public WaveConfiguration(int waveNumber, int minScoreToPass, string waveGoals, List<TargetType> targetSequence)
+    public WaveConfiguration(int waveNumber, GameScore minScoreToPass, string waveGoals, List<TargetType> targetSequence)
     {
         m_WaveNumber = waveNumber;
         m_MinScoreToPass = minScoreToPass;
@@ -29,7 +30,7 @@ public class WaveConfiguration
         set { m_WaveGoals = value; }
     }
 
-    public int MinScoreToPass
+    public GameScore MinScoreToPass
     {
         get { return m_MinScoreToPass; }
         set { m_MinScoreToPass = value; }

@@ -1,4 +1,6 @@
-﻿namespace VRStandardAssets.ShootingGallery
+﻿using VRStandardAssets.Common;
+
+namespace VRStandardAssets.ShootingGallery
 {
     struct PhaseResult
     {
@@ -6,6 +8,6 @@
         public string Message;
 
         public bool IsGameEnd { get; internal set; }
-        public int MinScoreToPass { get; internal set; }
+        public GameScore MinScoreToPass { get; internal set; }
     }
 }

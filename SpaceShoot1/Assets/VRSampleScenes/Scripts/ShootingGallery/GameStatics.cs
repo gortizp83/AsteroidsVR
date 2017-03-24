@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using VRStandardAssets.Common;
 using VRStandardAssets.ShootingGallery;
 
 internal class GameStatics
@@ -10,17 +11,35 @@ internal class GameStatics
         int waveCounter = 1;
 
         var levels = new List<LevelConfiguration>();
+
         // Level 1
         LevelConfiguration level1 = new LevelConfiguration(levelCount++);
-        List<TargetType> wave1 = GenerateTargetSequence(10, TargetType.Easy);
-        level1.WaveConfig.Add( new WaveConfiguration(waveCounter++, 10, "destroy at last 10 asteroids", wave1));
 
+        // Wave 1
+        List<TargetType> wave1 = GenerateTargetSequence(10, TargetType.Easy);
+        GameScore gameScore1 = new GameScore();
+        gameScore1.SetScore(TargetType.Easy, 10);
+        level1.WaveConfig.Add(new WaveConfiguration(waveCounter++, gameScore1, "destroy at last 10 asteroids", wave1));
+
+        // Wave 2
         List<TargetConfig> targetConfig = new List<TargetConfig>();
         targetConfig.Add(new TargetConfig(10, TargetType.Easy));
         targetConfig.Add(new TargetConfig(5, TargetType.Medium));
         List<TargetType> wave2 = new List<TargetType>(GenerateRandomSequence(targetConfig));
+        GameScore gameScore2 = new GameScore();
+        gameScore2.SetScore(TargetType.Easy, 10);
+        gameScore2.SetScore(TargetType.Medium, 5);
+        level1.WaveConfig.Add(new WaveConfiguration(waveCounter++, gameScore2, "destroy at last 15 asteroids", wave2));
 
-        level1.WaveConfig.Add(new WaveConfiguration(waveCounter++, 15, "destroy at last 15 asteroids", wave2));
+        // Wave 3
+        List<TargetConfig> targetConfig2 = new List<TargetConfig>();
+        targetConfig2.Add(new TargetConfig(10, TargetType.Medium));
+        targetConfig2.Add(new TargetConfig(5, TargetType.HardDouble));
+        List<TargetType> wave3 = new List<TargetType>(GenerateRandomSequence(targetConfig2));
+        GameScore gameScore3 = new GameScore();
+        gameScore3.SetScore(TargetType.Medium, 10);
+        gameScore3.SetScore(TargetType.HardDouble, 5);
+        level1.WaveConfig.Add(new WaveConfiguration(waveCounter++, gameScore3, "destroy at last 15 asteroids", wave3));
 
         levels.Add(level1);
         return levels;
