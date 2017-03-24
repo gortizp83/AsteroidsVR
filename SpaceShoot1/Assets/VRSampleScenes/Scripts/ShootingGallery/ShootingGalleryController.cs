@@ -120,9 +120,6 @@ namespace VRStandardAssets.ShootingGallery
             // Wait for the play updates to finish.
             yield return StartCoroutine (PlayUpdate ());
 
-            // Wait for the gun's UI to fade.
-            yield return StartCoroutine(m_UIController.HidePlayerUI());
-
             // The game is no longer playing.
             IsPlaying = false;
         }
