@@ -36,7 +36,7 @@ public class GameConfiguration : MonoBehaviour {
         else
         {
             result.Pass = false;
-            result.Message = "Better luck next time!";
+            result.Message = "Try again!";
             result.IsGameEnd = false;
         }
 

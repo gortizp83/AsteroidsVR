@@ -48,12 +48,14 @@ namespace VRStandardAssets.ShootingGallery
             // So if there are no targets, the probability of one spawning will be 1, then 0.94, then 0.88, etc.
             m_ProbabilityDelta = (1f - m_BaseSpawnProbability) / m_IdealTargetNumber;
 
+            yield return StartCoroutine(StartGame());
+
             // Continue looping through all the phases.
             while (true)
             {
-                yield return StartCoroutine(StartPhase());
-                yield return StartCoroutine(PlayPhase());
-                yield return StartCoroutine(EndPhase());
+                yield return StartCoroutine(StartWave());
+                yield return StartCoroutine(PlayWave());
+                yield return StartCoroutine(EndWave());
             }
         }
 
@@ -70,23 +72,27 @@ namespace VRStandardAssets.ShootingGallery
             SessionData.MinScoreToPassWave = currentWave.MinScoreToPass;
         }
 
-        private IEnumerator StartPhase ()
+
+        private IEnumerator StartGame()
         {
-            UpdateLevelInfo();
-
             // Wait for the intro UI to fade in.
-            yield return StartCoroutine (m_UIController.ShowIntroUI ());
-
-            // Show the reticle (since there is now a selection slider) and hide the radial.
-            m_Reticle.Show ();
-            m_SelectionRadial.Hide ();
+            yield return StartCoroutine(m_UIController.ShowIntroUI());
 
             // Turn on the tap warnings for the selection slider.
-            m_InputWarnings.TurnOnDoubleTapWarnings ();
-            m_InputWarnings.TurnOnSingleTapWarnings ();
+            m_InputWarnings.TurnOnDoubleTapWarnings();
+            m_InputWarnings.TurnOnSingleTapWarnings();
+
+            // Show the reticle (since there is now a selection slider) and hide the radial.
+            m_Reticle.Show();
+            m_SelectionRadial.Hide();
 
             // Wait for the selection slider to finish filling.
-            yield return StartCoroutine (m_SelectionSlider.WaitForBarToFill ());
+            yield return StartCoroutine(m_SelectionSlider.WaitForBarToFill());
+        }
+
+        private IEnumerator StartWave ()
+        {
+            UpdateLevelInfo();
 
             // Turn off the tap warnings since it will now be tap to fire.
             m_InputWarnings.TurnOffDoubleTapWarnings ();
@@ -97,7 +103,7 @@ namespace VRStandardAssets.ShootingGallery
         }
 
 
-        private IEnumerator PlayPhase ()
+        private IEnumerator PlayWave ()
         {
             // Wait for the UI on the player's gun to fade in.
             yield return StartCoroutine(m_UIController.ShowPlayerUI());
@@ -122,29 +128,31 @@ namespace VRStandardAssets.ShootingGallery
         }
 
 
-        private IEnumerator EndPhase ()
+        private IEnumerator EndWave ()
         {
             // TODO: send stats to ensure the player passed or failed the wave
             PhaseResult result = m_GameConfiguration.FinishPhase(SessionData.Score);
-
-            // Hide the reticle since the radial is about to be used.
-            m_Reticle.Hide ();
             
-            // In order, wait for the outro UI to fade in then wait for an additional delay.
-            yield return StartCoroutine (m_UIController.ShowOutroUI (result));
-            //yield return StartCoroutine(m_UIController.ShowOutroUI());
-            yield return new WaitForSeconds(m_EndDelay);
-            
-            // Turn on the tap warnings.
-            m_InputWarnings.TurnOnDoubleTapWarnings();
-            m_InputWarnings.TurnOnSingleTapWarnings();
+            if (!result.Pass)
+            {
+                // Hide the reticle since the radial is about to be used.
+                m_Reticle.Hide();
 
-            // Wait for the radial to fill (this will show and hide the radial automatically).
-            yield return StartCoroutine(m_SelectionRadial.WaitForSelectionRadialToFill());
+                // In order, wait for the outro UI to fade in then wait for an additional delay.
+                yield return StartCoroutine(m_UIController.ShowOutroUI(result));
+                yield return new WaitForSeconds(m_EndDelay);
 
-            // The radial is now filled so stop the warnings.
-            m_InputWarnings.TurnOffDoubleTapWarnings();
-            m_InputWarnings.TurnOffSingleTapWarnings();
+                // Turn on the tap warnings.
+                m_InputWarnings.TurnOnDoubleTapWarnings();
+                m_InputWarnings.TurnOnSingleTapWarnings();
+
+                // Wait for the radial to fill (this will show and hide the radial automatically).
+                yield return StartCoroutine(m_SelectionRadial.WaitForSelectionRadialToFill());
+
+                // The radial is now filled so stop the warnings.
+                m_InputWarnings.TurnOffDoubleTapWarnings();
+                m_InputWarnings.TurnOffSingleTapWarnings();
+            }
 
             // Wait for the outro UI to fade out.
             yield return StartCoroutine(m_UIController.HideOutroUI());

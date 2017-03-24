@@ -10,9 +10,12 @@ namespace VRStandardAssets.Common
 
         public static bool operator <=(GameScore first, GameScore second)
         {
-            foreach (var item in first.m_ScoreMap)
+            var values = Enum.GetValues(typeof(TargetType));
+
+            foreach (var value in values)
             {
-                if (item.Value > second.GetScore(item.Key))
+                TargetType type = (TargetType)value;
+                if (first.GetScore(type) > second.GetScore(type))
                 {
                     return false;
                 }
@@ -23,9 +26,12 @@ namespace VRStandardAssets.Common
 
         public static bool operator >=(GameScore first, GameScore second)
         {
-            foreach (var item in first.m_ScoreMap)
+            var values = Enum.GetValues(typeof(TargetType));
+
+            foreach (var value in values)
             {
-                if (item.Value < second.GetScore(item.Key))
+                TargetType type = (TargetType)value;
+                if (first.GetScore(type) < second.GetScore(type))
                 {
                     return false;
                 }

@@ -26,7 +26,7 @@ namespace VRStandardAssets.Common
         private static int s_NumberOfWaves = 2;
         private static int s_Level = 1;
         private static string s_CurrentWaveGoals;
-        private static GameScore s_MinScoreToPassWave;
+        private static GameScore s_MinScoreToPassWave = new GameScore();
 
         public static GameScore Score { get { return s_Score; } }
 
