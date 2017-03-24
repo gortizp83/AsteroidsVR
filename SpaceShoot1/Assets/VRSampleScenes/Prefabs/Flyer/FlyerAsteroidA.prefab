@@ -5,21 +5,21 @@ GameObject:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  serializedVersion: 5
+  serializedVersion: 4
   m_Component:
-  - component: {fileID: 402022}
-  - component: {fileID: 3313292}
-  - component: {fileID: 2365746}
-  - component: {fileID: 11442700}
-  - component: {fileID: 5427550}
-  - component: {fileID: 13545648}
+  - 4: {fileID: 402022}
+  - 33: {fileID: 3313292}
+  - 23: {fileID: 2365746}
+  - 114: {fileID: 11442700}
+  - 54: {fileID: 5427550}
+  - 135: {fileID: 13545648}
   m_Layer: 2
   m_Name: FlyerAsteroidA
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &402022
 Transform:
   m_ObjectHideFlags: 1
@@ -29,10 +29,10 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -3.8904428, y: -50.54286, z: 40.599976}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!23 &2365746
 MeshRenderer:
   m_ObjectHideFlags: 1
@@ -47,9 +47,7 @@ MeshRenderer:
   m_ReflectionProbeUsage: 3
   m_Materials:
   - {fileID: 2100000, guid: b85eb2ade11cab44cb0e1679bdda5ad4, type: 2}
-  m_StaticBatchInfo:
-    firstSubMesh: 0
-    subMeshCount: 0
+  m_SubsetIndices: 
   m_StaticBatchRoot: {fileID: 0}
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
@@ -57,7 +55,7 @@ MeshRenderer:
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
-  m_SelectedEditorRenderState: 3
+  m_SelectedWireframeHidden: 0
   m_MinimumChartSize: 4
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
