@@ -72,7 +72,6 @@ namespace VRStandardAssets.ShootingGallery
             SessionData.MinScoreToPassWave = currentWave.MinScoreToPass;
         }
 
-
         private IEnumerator StartGame()
         {
             // Wait for the intro UI to fade in.
@@ -130,13 +129,13 @@ namespace VRStandardAssets.ShootingGallery
             // TODO: send stats to ensure the player passed or failed the wave
             PhaseResult result = m_GameConfiguration.FinishPhase(SessionData.Score);
             
-            if (!result.Pass)
+            if (!result.Pass || result.IsGameEnd)
             {
                 // Hide the reticle since the radial is about to be used.
                 m_Reticle.Hide();
 
                 // In order, wait for the outro UI to fade in then wait for an additional delay.
-                yield return StartCoroutine(m_UIController.ShowOutroUI(result));
+                yield return StartCoroutine(m_UIController.ShowOutroUI(result.Message));
                 yield return new WaitForSeconds(m_EndDelay);
 
                 // Turn on the tap warnings.
@@ -149,10 +148,15 @@ namespace VRStandardAssets.ShootingGallery
                 // The radial is now filled so stop the warnings.
                 m_InputWarnings.TurnOffDoubleTapWarnings();
                 m_InputWarnings.TurnOffSingleTapWarnings();
+                // Wait for the outro UI to fade out.
+                yield return StartCoroutine(m_UIController.HideOutroUI());
             }
-
-            // Wait for the outro UI to fade out.
-            yield return StartCoroutine(m_UIController.HideOutroUI());
+            else
+            {
+                yield return StartCoroutine(m_UIController.ShowEndOfWaveUI(result.Message));
+                yield return new WaitForSeconds(0.5f);
+                yield return StartCoroutine(m_UIController.HideEndOfWaveUI());
+            }
         }
 
 

@@ -15,8 +15,21 @@ namespace VRStandardAssets.ShootingGallery
     {
         [SerializeField] private UIFader m_IntroUI;     // This controls fading the UI shown during the intro.
         [SerializeField] private UIFader m_OutroUI;     // This controls fading the UI shown during the outro.
+        [SerializeField] private Text m_OutroUIMessage;
         [SerializeField] private UIFader m_PlayerUI;    // This controls fading the UI that shows around the gun that moves with the player.
+        [SerializeField] private UIFader m_EndOfWaveUI;
         [SerializeField] private Text m_EndOfWaveMessage;      // Reference to the Text component that displays the end of wave message
+
+        internal IEnumerator ShowEndOfWaveUI(string endOfWaveMessage)
+        {
+            m_EndOfWaveMessage.text = endOfWaveMessage;
+            yield return StartCoroutine(m_EndOfWaveUI.InteruptAndFadeIn());
+        }
+
+        public IEnumerator HideEndOfWaveUI()
+        {
+            yield return StartCoroutine(m_EndOfWaveUI.InteruptAndFadeOut());
+        }
 
         public IEnumerator ShowIntroUI()
         {
@@ -29,18 +42,9 @@ namespace VRStandardAssets.ShootingGallery
             yield return StartCoroutine(m_IntroUI.InteruptAndFadeOut());
         }
 
-
-        public IEnumerator ShowOutroUI()
+        internal IEnumerator ShowOutroUI(string outroMessage)
         {
-            m_EndOfWaveMessage.text = "Game is ending";
-
-            yield return StartCoroutine(m_OutroUI.InteruptAndFadeIn());
-        }
-
-        internal IEnumerator ShowOutroUI(PhaseResult result)
-        {
-            m_EndOfWaveMessage.text = result.IsGameEnd? "Game End. Play again?" : result.Message;
-
+            m_OutroUIMessage.text = outroMessage;
             yield return StartCoroutine(m_OutroUI.InteruptAndFadeIn());
         }
 
@@ -48,7 +52,6 @@ namespace VRStandardAssets.ShootingGallery
         {
             yield return StartCoroutine(m_OutroUI.InteruptAndFadeOut());
         }
-
 
         public IEnumerator ShowPlayerUI ()
         {

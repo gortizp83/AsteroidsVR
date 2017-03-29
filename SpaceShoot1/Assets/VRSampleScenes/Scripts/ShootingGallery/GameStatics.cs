@@ -38,7 +38,7 @@ internal class GameStatics
         List<TargetType> wave3 = new List<TargetType>(GenerateRandomSequence(targetConfig2));
         GameScore gameScore3 = new GameScore();
         gameScore3.SetScore(TargetType.Medium, 10);
-        gameScore3.SetScore(TargetType.HardDouble, 5);
+        gameScore3.SetScore(TargetType.Hard, 10);
         level1.WaveConfig.Add(new WaveConfiguration(waveCounter++, gameScore3, "destroy at last 15 asteroids", wave3));
 
         levels.Add(level1);

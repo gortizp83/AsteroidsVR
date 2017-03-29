@@ -35,11 +35,13 @@ public class LevelConfiguration
 
     public bool TryMoveNextWave()
     {
-        if (m_waveIdx++ < WaveConfig.Count)
+        if (++m_waveIdx >= WaveConfig.Count)
         {
-            return true;
+            // We don't have more waves. Reset wave count.
+            m_waveIdx = 0;
+            return false;
         }
 
-        return false;
+        return true;
     }
 }

@@ -30,21 +30,34 @@ public class GameConfiguration : MonoBehaviour {
         if (score >= GetCurrentLevel().GetCurrentWave().MinScoreToPass)
         {
             result.Pass = true;
-            result.Message = "Good job!";
             result.IsGameEnd = !MoveToNextPhase();
+
+            if (result.IsGameEnd)
+            {
+                result.Message = "Game Over!";
+            }
+            else
+            {
+                result.Message = string.Format("Wave {0}", GetCurrentLevel().GetCurrentWave().WaveNumber.ToString());
+            }
         }
         else
         {
             result.Pass = false;
-            result.Message = "Try again!";
+            result.Message = string.Format("Wave {0} <b>FAILED</b>!\r\n Try Again!", GetCurrentLevel().GetCurrentWave().WaveNumber.ToString()); ;
             result.IsGameEnd = false;
         }
 
         return result;
     }
 
+    /// <summary>
+    /// Move to the next wave or level.
+    /// </summary>
+    /// <returns>false if we have reached the last level and wave</returns>
     private bool MoveToNextPhase()
     {
+        // Try moving to the next level once we have reached the maximum wave count
         if (!GetCurrentLevel().TryMoveNextWave())
         {
             m_levelIdx++;
@@ -52,8 +65,8 @@ public class GameConfiguration : MonoBehaviour {
 
         if (m_levelIdx >= m_Levels.Count)
         {
-            // We don't have more levels! Return back to the last level to avoid crashes
-            m_levelIdx--;
+            // We don't have more levels! Return back to the first level to avoid crashes
+            m_levelIdx = 0;
             return false;
         }
 
