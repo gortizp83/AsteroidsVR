@@ -364,11 +364,11 @@ MonoBehaviour:
   m_DestroyClip: {fileID: 8300000, guid: fd01d3e429819774181394d1ad09e6f2, type: 3}
   m_SpawnClip: {fileID: 8300000, guid: 906fabe377b8e8f4397285b9c752041a, type: 3}
   m_MissedClip: {fileID: 8300000, guid: ab3d0eee05f16c74db5adf795fb073d5, type: 3}
-  m_TargetSpeed: 2.5
+  m_TargetSpeed: 5
   m_SpawnScale: 0.125
   m_InitialLifePoints: 8
   m_HitColor: {r: 1, g: 0, b: 0, a: 1}
-  m_InitialColor: {r: 0.4044118, g: 0.02081531, b: 0.02081531, a: 1}
+  m_InitialColor: {r: 0.30882353, g: 0.30882353, b: 0.30882353, a: 1}
   m_TargetType: 2
 --- !u!114 &11499314
 MonoBehaviour:
