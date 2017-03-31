@@ -1156,6 +1156,7 @@ MonoBehaviour:
   m_Duration: 0.5
   m_Audio: {fileID: 814326905}
   m_OnFilledClip: {fileID: 8300000, guid: 9f9d2c4dc4b50704bbf83a0e84e35936, type: 3}
+  m_OnFillingClip: {fileID: 8300000, guid: 48f2b0a56c920d841aadf855444e5dca, type: 3}
   m_Slider: {fileID: 1255433242}
   m_VRInput: {fileID: 2046500880}
   m_BarCanvas: {fileID: 814326902}
@@ -1166,6 +1167,11 @@ MonoBehaviour:
 --- !u!82 &814326905 stripped
 AudioSource:
   m_PrefabParentObject: {fileID: 8252848, guid: 863a0315eb7aa5349ba3dd88bfdbc120,
+    type: 2}
+  m_PrefabInternal: {fileID: 1505504113}
+--- !u!225 &814326907 stripped
+CanvasGroup:
+  m_PrefabParentObject: {fileID: 22520670, guid: 863a0315eb7aa5349ba3dd88bfdbc120,
     type: 2}
   m_PrefabInternal: {fileID: 1505504113}
 --- !u!43 &922163164
@@ -1980,6 +1986,7 @@ MonoBehaviour:
   m_GunFlareVisibleSeconds: 0.07
   m_GunContainerSmoothing: 10
   m_GunAudio: {fileID: 1054689339}
+  m_GunBigShotAudio: {fileID: 8300000, guid: 6395770358c04bf4b9dcaa3d3ba826b3, type: 3}
   m_ShootingGalleryController: {fileID: 163866253}
   m_EyeRaycaster: {fileID: 2046500879}
   m_VRInput: {fileID: 2046500880}
@@ -2162,6 +2169,7 @@ MonoBehaviour:
   - {fileID: 958847504}
   - {fileID: 2025397182}
   - {fileID: 1810663754}
+  - {fileID: 814326907}
 --- !u!1 &1226218089
 GameObject:
   m_ObjectHideFlags: 0
@@ -3381,6 +3389,10 @@ Prefab:
     - target: {fileID: 22493394, guid: 863a0315eb7aa5349ba3dd88bfdbc120, type: 2}
       propertyPath: m_SizeDelta.y
       value: 2.25
+      objectReference: {fileID: 0}
+    - target: {fileID: 22520670, guid: 863a0315eb7aa5349ba3dd88bfdbc120, type: 2}
+      propertyPath: m_Alpha
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 6557976, guid: 863a0315eb7aa5349ba3dd88bfdbc120, type: 2}

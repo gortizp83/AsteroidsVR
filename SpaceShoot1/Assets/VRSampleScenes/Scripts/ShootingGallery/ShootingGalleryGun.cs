@@ -14,6 +14,7 @@ namespace VRStandardAssets.ShootingGallery
         [SerializeField] private float m_GunFlareVisibleSeconds = 0.07f;                // How long, in seconds, the line renderer and flare are visible for with each shot.
         [SerializeField] private float m_GunContainerSmoothing = 10f;                   // How fast the gun arm follows the reticle.
         [SerializeField] private AudioSource m_GunAudio;                                // The audio source which plays the sound of the gun firing.
+        [SerializeField] private AudioClip m_GunBigShotAudio;
         [SerializeField] private ShootingGalleryController m_ShootingGalleryController; // Reference to the controller so the gun cannot fire whilst the game isn't playing.
         [SerializeField] private VREyeRaycaster m_EyeRaycaster;                         // Used to detect whether the gun is currently aimed at something.
         [SerializeField] private VRInput m_VRInput;                                     // Used to tell the gun when to fire.
@@ -28,9 +29,11 @@ namespace VRStandardAssets.ShootingGallery
         private bool m_isBigFire;
         private AnimationCurve m_GunFlareInitialWidthCurve;
         private AnimationCurve m_GunFlareBigShotWidthCurve;
+        private AudioClip m_GunOriginalClip;
 
         private void Awake()
         {
+            m_GunOriginalClip = m_GunAudio.clip;
             m_GunFlare.enabled = false;
             m_GunFlareInitialWidthCurve = new AnimationCurve(m_GunFlare.widthCurve.keys);
 
@@ -118,6 +121,15 @@ namespace VRStandardAssets.ShootingGallery
 
         private IEnumerator Fire(Transform target, bool isBigFire)
         {
+            if (isBigFire)
+            {
+                m_GunAudio.clip = m_GunBigShotAudio;
+            }
+            else
+            {
+                m_GunAudio.clip = m_GunOriginalClip;
+            }
+
             // Play the sound of the gun firing.
             m_GunAudio.Play();
 
