@@ -22,25 +22,40 @@ namespace VRStandardAssets.ShootingGallery
         [SerializeField] private Transform m_GunEnd;                                    // This is where the line renderer should start from.
         [SerializeField] private LineRenderer m_GunFlare;                               // This is used to display the gun as a laser.
         [SerializeField] private Reticle m_Reticle;                                     // This is what the gun arm should be aiming at.
+        [SerializeField] private BigFireSlider m_BigFireSlider;
 
         private const float k_DampingCoef = -20f;                                       // This is the coefficient used to ensure smooth damping of this gameobject.
-
+        private bool m_isBigFire;
+        private AnimationCurve m_GunFlareInitialWidthCurve;
+        private AnimationCurve m_GunFlareBigShotWidthCurve;
 
         private void Awake()
         {
             m_GunFlare.enabled = false;
+            m_GunFlareInitialWidthCurve = new AnimationCurve(m_GunFlare.widthCurve.keys);
+
+            m_GunFlareBigShotWidthCurve = new AnimationCurve();
+            foreach (var key in m_GunFlareInitialWidthCurve.keys)
+            {
+                Keyframe newKey = key;
+                newKey.value *= 15;
+                m_GunFlareBigShotWidthCurve.AddKey(newKey);
+            }
         }
 
 
         private void OnEnable ()
         {
+            m_BigFireSlider.OnBarFilled += HandleBigFireSliderFill;
             m_VRInput.OnDown += HandleDown;
+            m_VRInput.OnUp += HandleUp;
         }
-
 
         private void OnDisable ()
         {
+            m_BigFireSlider.OnBarFilled -= HandleBigFireSliderFill;
             m_VRInput.OnDown -= HandleDown;
+            m_VRInput.OnUp -= HandleUp;
         }
 
 
@@ -61,31 +76,59 @@ namespace VRStandardAssets.ShootingGallery
                 m_GunContainerSmoothing * Time.deltaTime);
         }
 
+        private void HandleBigFireSliderFill()
+        {
+            m_isBigFire = true;
+        }
 
         private void HandleDown ()
+        {
+            ExecuteFire(false);
+        }
+
+        private void HandleUp()
+        {
+            if (m_isBigFire)
+            {
+                ExecuteFire(true);
+            }
+
+            m_isBigFire = false;
+        }
+
+        private void ExecuteFire(bool isBigFire)
         {
             // If the game isn't playing don't do anything.
             if (!m_ShootingGalleryController.IsPlaying)
                 return;
-            
+
             // Otherwise, if there is an interactible currently being looked at, try to find it's ShootingTarget component.
             ShootingTarget shootingTarget = m_EyeRaycaster.CurrentInteractible ? m_EyeRaycaster.CurrentInteractible.GetComponent<ShootingTarget>() : null;
+
+            if (shootingTarget != null)
+                shootingTarget.TargetHit(isBigFire ? 4 : 1);
 
             // If there is a ShootingTarget component get it's transform as the target for shooting at.
             Transform target = shootingTarget ? shootingTarget.transform : null;
 
             // Start shooting at the target.
-            StartCoroutine (Fire (target));
+            StartCoroutine(Fire(target, isBigFire));
         }
 
 
-        private IEnumerator Fire(Transform target)
+        private IEnumerator Fire(Transform target, bool isBigFire)
         {
             // Play the sound of the gun firing.
             m_GunAudio.Play();
 
             // Set the length of the line renderer to the default.
             float lineLength = m_DefaultLineLength;
+
+            m_GunFlare.widthCurve = m_GunFlareInitialWidthCurve;
+            if (isBigFire)
+            {
+                m_GunFlare.widthCurve = m_GunFlareBigShotWidthCurve;
+            }
 
             // If there is a target, the line renderer's length is instead the distance from the gun to the target.
             if (target)

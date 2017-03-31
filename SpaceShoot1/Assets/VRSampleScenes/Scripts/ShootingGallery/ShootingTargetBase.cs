@@ -8,6 +8,6 @@ namespace VRStandardAssets.ShootingGallery
     {
         public abstract void Restart(float gameTimeRemaining);
         public abstract void DoUpdate();
-        protected abstract void HandleDown();
+        public abstract void TargetHit(int damage);
     }
 }

@@ -11,19 +11,19 @@ public class MultiTarget : ShootingTarget {
         for (int i = 0; i < this.transform.childCount; i++)
         {
             this.transform.GetChild(i).GetComponent<ShootingTarget>().IgnoreHit = true;
-            var item = this.transform.GetChild(i).GetComponent<VRInteractiveItem>();
-            item.OnDown += HandleDown;
+            //var item = this.transform.GetChild(i).GetComponent<VRInteractiveItem>();
+            //item.OnDown += HandleDown;
         }
 
         base.Awake();
     }
 
-    protected override void HandleDown()
+    public override void TargetHit(int damage)
     {
         for (int i = 0; i < this.transform.childCount; i++)
         {
             var target = this.transform.GetChild(i).GetComponent<ShootingTarget>();
-            StartCoroutine(target.TargetHit());
+            StartCoroutine(target.AnimateTargetHit());
         }
 
         if (--m_CurrentLifePoints > 0)
@@ -45,7 +45,7 @@ public class MultiTarget : ShootingTarget {
             child.GetComponent<ShootingTarget>().TargetSpeed = newTargetSpeed * speedMuliplier;
 
             var item = child.GetComponent<VRInteractiveItem>();
-            item.OnDown -= HandleDown;
+            //item.OnDown -= HandleDown;
         }
     }
 	

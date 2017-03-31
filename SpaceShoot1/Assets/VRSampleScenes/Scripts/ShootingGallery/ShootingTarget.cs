@@ -111,18 +111,6 @@ namespace VRStandardAssets.ShootingGallery
             m_MeshRenderer.material.color = m_InitialColor;
         }
 
-        private void OnEnable ()
-        {
-            m_InteractiveItem.OnDown += HandleDown;
-        }
-
-
-        private void OnDisable ()
-        {
-            m_InteractiveItem.OnDown -= HandleDown;
-        }
-
-
         private void OnDestroy()
         {
             // Ensure the event is completely unsubscribed when the target is destroyed.
@@ -200,7 +188,7 @@ namespace VRStandardAssets.ShootingGallery
                 OnRemove (this);
         }
 
-        public IEnumerator TargetHit()
+        public IEnumerator AnimateTargetHit()
         {
             m_MeshRenderer.material.color = m_HitColor;
 
@@ -210,8 +198,7 @@ namespace VRStandardAssets.ShootingGallery
             m_MeshRenderer.material.color = m_InitialColor;
         }
 
-
-        protected override void HandleDown()
+        public override void TargetHit(int damage)
         {
             if (IgnoreHit)
                 return;
@@ -220,9 +207,9 @@ namespace VRStandardAssets.ShootingGallery
             if (m_IsEnding)
                 return;
 
-            StartCoroutine(TargetHit());
+            StartCoroutine(AnimateTargetHit());
 
-            if (--m_CurrentLifePoints > 0)
+            if ((m_CurrentLifePoints -= damage) > 0)
                 return;
 
             // Otherwise this is ending the target's lifetime.
@@ -231,7 +218,7 @@ namespace VRStandardAssets.ShootingGallery
             // Turn off the visual and physical aspects.
             m_Renderer.enabled = false;
             m_Collider.enabled = false;
-            
+
             // Add to the player's score.
             SessionData.AddScore(this.GetComponent<ShootingTarget>().Type);
 
