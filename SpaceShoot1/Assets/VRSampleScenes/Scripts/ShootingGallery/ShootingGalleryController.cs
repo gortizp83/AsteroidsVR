@@ -128,7 +128,10 @@ namespace VRStandardAssets.ShootingGallery
         {
             // TODO: send stats to ensure the player passed or failed the wave
             PhaseResult result = m_GameConfiguration.FinishPhase(SessionData.Score);
-            
+
+            // Wait for the UI on the player's gun to fade out.
+            yield return StartCoroutine(m_UIController.HidePlayerUI());
+
             if (!result.Pass || result.IsGameEnd)
             {
                 // Hide the reticle since the radial is about to be used.

@@ -18,7 +18,7 @@ namespace VRStandardAssets.Utils
         [SerializeField] private float m_Duration = 2f;                     // The length of time it takes for the bar to fill.
         [SerializeField] private AudioSource m_Audio;                       // Reference to the audio source that will play effects when the user looks at it and when it fills.
         [SerializeField] private AudioClip m_OnFilledClip;                  // The clip to play when the bar finishes filling.
-        [SerializeField] private AudioClip m_OnFillingClip;                  // The clip to play when the bar finishes filling.
+        //[SerializeField] private AudioClip m_OnFillingClip;                  // The clip to play when the bar finishes filling.
         [SerializeField] private Slider m_Slider;                           // Optional reference to the UI slider (unnecessary if using a standard Renderer).
         [SerializeField] private VRInput m_VRInput;                         // Reference to the VRInput to detect button presses.
         [SerializeField] private GameObject m_BarCanvas;                    // Optional reference to the GameObject that holds the slider (only necessary if DisappearOnBarFill is true).
@@ -38,15 +38,21 @@ namespace VRStandardAssets.Utils
 
         private void OnEnable ()
         {
-            m_VRInput.OnDown += HandleDown;
-            m_VRInput.OnUp += HandleUp;
+            if (m_VRInput)
+            {
+                m_VRInput.OnDown += HandleDown;
+                m_VRInput.OnUp += HandleUp;
+            }
         }
 
 
         private void OnDisable ()
         {
-            m_VRInput.OnDown -= HandleDown;
-            m_VRInput.OnUp -= HandleUp;
+            if (m_VRInput)
+            {
+                m_VRInput.OnDown -= HandleDown;
+                m_VRInput.OnUp -= HandleUp;
+            }
         }
 
 
@@ -142,12 +148,22 @@ namespace VRStandardAssets.Utils
 
         private IEnumerator PlayFillingClip()
         {
-            m_Audio.clip = m_OnFillingClip;
-            m_Audio.PlayDelayed(0.1f);
+            //m_Audio.clip = m_OnFillingClip;
+            //m_Audio.PlayDelayed(0.1f);
             yield return null;
         }
 
         private void HandleDown ()
+        {
+            StartFilling();
+        }
+
+        private void HandleUp ()
+        {
+            StopFilling();
+        }
+
+        public void StartFilling()
         {
             if (!m_isVisible)
                 return;
@@ -156,16 +172,15 @@ namespace VRStandardAssets.Utils
             StartCoroutine(PlayFillingClip());
         }
 
-
-        private void HandleUp ()
+        public void StopFilling()
         {
             if (!m_isVisible)
                 return;
 
-            m_Audio.Stop();
+            //m_Audio.Stop();
             // If the coroutine has been started (and thus we have a reference to it) stop it.
             if (m_FillBarRoutine != null)
-                StopCoroutine (m_FillBarRoutine);
+                StopCoroutine(m_FillBarRoutine);
 
             // Reset the timer and bar values.
             m_Timer = 0f;
