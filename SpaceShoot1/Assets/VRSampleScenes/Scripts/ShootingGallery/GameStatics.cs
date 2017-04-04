@@ -19,7 +19,7 @@ internal class GameStatics
         List<TargetType> wave1 = GenerateTargetSequence(10, TargetType.Easy);
         GameScore gameScore1 = new GameScore();
         gameScore1.SetScore(TargetType.Easy, 10);
-        level1.WaveConfig.Add(new WaveConfiguration(waveCounter++, gameScore1, "destroy at last 10 asteroids", wave1));
+        level1.WaveConfig.Add(new WaveConfiguration(waveCounter++, gameScore1, wave1));
 
         // Wave 2
         List<TargetConfig> targetConfig = new List<TargetConfig>();
@@ -29,7 +29,7 @@ internal class GameStatics
         GameScore gameScore2 = new GameScore();
         gameScore2.SetScore(TargetType.Easy, 10);
         gameScore2.SetScore(TargetType.Medium, 5);
-        level1.WaveConfig.Add(new WaveConfiguration(waveCounter++, gameScore2, "destroy at last 15 asteroids", wave2));
+        level1.WaveConfig.Add(new WaveConfiguration(waveCounter++, gameScore2, wave2));
 
         // Wave 3
         List<TargetConfig> targetConfig2 = new List<TargetConfig>();
@@ -39,7 +39,7 @@ internal class GameStatics
         GameScore gameScore3 = new GameScore();
         gameScore3.SetScore(TargetType.Medium, 10);
         gameScore3.SetScore(TargetType.Hard, 5);
-        level1.WaveConfig.Add(new WaveConfiguration(waveCounter++, gameScore3, "destroy at last 15 asteroids", wave3));
+        level1.WaveConfig.Add(new WaveConfiguration(waveCounter++, gameScore3, wave3));
 
         levels.Add(level1);
         return levels;
