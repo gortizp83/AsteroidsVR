@@ -19,7 +19,7 @@ namespace VRStandardAssets.ShootingGallery
         [SerializeField] private float m_GameLength = 60f;              // Time a game lasts in seconds.
         [SerializeField] private float m_SpawnInterval = 1f;            // How frequently a target could spawn.
         [SerializeField] private float m_EndDelay = 1.5f;               // The time the user needs to wait between the outro UI and being able to continue.
-        [SerializeField] private SelectionSlider m_SelectionSlider;     // Used to confirm the user has understood the intro UI.
+        [SerializeField] private WaveSelectionController m_WaveSelectionController;     // Used to let the user pick the wave she is playing.
         [SerializeField] private Transform m_Camera;                    // Used to determine where targets can spawn.
         [SerializeField] private SelectionRadial m_SelectionRadial;     // Used to continue past the outro.
         [SerializeField] private Reticle m_Reticle;                     // This is turned on and off when it is required and not.
@@ -89,7 +89,7 @@ namespace VRStandardAssets.ShootingGallery
             m_SelectionRadial.Hide();
 
             // Wait for the selection slider to finish filling.
-            yield return StartCoroutine(m_SelectionSlider.WaitForBarToFill());
+            yield return StartCoroutine(m_WaveSelectionController.WaitForWaveSelection());
         }
 
         private IEnumerator StartWave ()

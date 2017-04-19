@@ -14,6 +14,8 @@ public class VRButton : MonoBehaviour {
     [SerializeField] private AudioClip m_OnOverClip;                    // The clip to play when the user looks at the button.
     [SerializeField] private AudioClip m_OnPressedClip;                  // The clip to play when the button is pressed.
 
+    public event Action<VRButton> OnDown;
+
     private bool m_Pressed = false;
     private bool m_GazeOver = false;                                            // Whether the user is currently looking at the bar.
 
@@ -31,6 +33,13 @@ public class VRButton : MonoBehaviour {
             m_VRInput.OnDown += HandleDown;
             m_VRInput.OnUp += HandleUp;
         }
+    }
+
+    private Dictionary<string, object> m_propertyBag = new Dictionary<string, object>();
+
+    public Dictionary<string, object> PropertyBag
+    {
+        get { return m_propertyBag; }
     }
 
     private void OnEnable()
@@ -83,7 +92,8 @@ public class VRButton : MonoBehaviour {
             m_Audio.clip = m_OnPressedClip;
             m_Audio.Play();
 
-            // TODO: add an action that triggers when user select the button
+            if (OnDown != null)
+                OnDown(this);
         }
     }
 
@@ -94,6 +104,12 @@ public class VRButton : MonoBehaviour {
 
         m_InteractiveItem.OnOver -= HandleOver;
         m_InteractiveItem.OnOut -= HandleOut;
+    }
+
+    private void OnDestroy()
+    {
+        // Ensure that all events are unsubscribed when this is destroyed.
+        OnDown = null;
     }
 
     // Use this for initialization
