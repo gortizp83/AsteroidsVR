@@ -13,28 +13,18 @@ public class WaveSelectionController : MonoBehaviour {
 
     private const string kWaveValue = "waveValue";
     private VRButton m_pressedButton = null;
+    private int m_selectedWave = -1;
+    private List<GameObject> m_buttons = new List<GameObject>();
 
     public int SelectedWave
     {
         get
         {
-            int wave = -1;
-            object value;
-            if (m_pressedButton != null && m_pressedButton.PropertyBag.TryGetValue(kWaveValue, out value))
-            {
-                wave = (int)value;
-            }
-            return wave;
+            return m_selectedWave;
         }
     }
 
-    // Use this for initialization
-    void Start ()
-    {
-        ShowWaveButtons();
-    }
-
-    private void ShowWaveButtons()
+    public void ShowWaveButtons()
     {
         m_pressedButton = null;
 
@@ -56,6 +46,8 @@ public class WaveSelectionController : MonoBehaviour {
             var width = rectTransform.rect.width;
             rectTransform.localPosition = new Vector3(i * width, 0, 0);
             rectTransform.localScale = Vector3.one;
+
+            m_buttons.Add(newButton);
         }
     }
 
@@ -70,5 +62,24 @@ public class WaveSelectionController : MonoBehaviour {
         {
             yield return null;
         }
+
+        m_selectedWave = -1;
+        object value;
+        if (m_pressedButton != null && m_pressedButton.PropertyBag.TryGetValue(kWaveValue, out value))
+        {
+            m_selectedWave = (int)value;
+        }
+
+        m_pressedButton = null;
+
+        // clear all buttons, we'll recreate them again when showing the menu
+        int count = m_buttons.Count;
+        for (int i = count - 1; i >= 0; i--)
+        {
+            m_buttons[i].GetComponent<VRButton>().OnDown -= VrButton_OnDown;
+            GameObject.Destroy(m_buttons[i]);
+        }
+
+        m_buttons.Clear();
     }
 }

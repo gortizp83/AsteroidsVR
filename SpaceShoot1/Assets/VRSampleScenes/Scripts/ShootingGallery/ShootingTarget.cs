@@ -45,6 +45,7 @@ namespace VRStandardAssets.ShootingGallery
         private bool m_IsEnding;                                        // Whether the target is currently being removed by another source.
         protected int m_CurrentLifePoints;
         private bool m_IgnoreHit = false;
+        private bool m_IsPaused = false;
 
         public TargetType Type
         {
@@ -80,8 +81,21 @@ namespace VRStandardAssets.ShootingGallery
             }
         }
 
+        public void Pause()
+        {
+            m_IsPaused = true;
+        }
+
+        public void Resume()
+        {
+            m_IsPaused = false;
+        }
+
         private void Update()
         {
+            if (m_IsPaused)
+                return;
+
             DoUpdate();
         }
 

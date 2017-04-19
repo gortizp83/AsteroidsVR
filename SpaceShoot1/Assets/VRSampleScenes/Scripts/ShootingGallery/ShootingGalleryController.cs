@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -28,12 +29,13 @@ namespace VRStandardAssets.ShootingGallery
         [SerializeField] private UIController m_UIController;           // Used to encapsulate the UI.
         [SerializeField] private InputWarnings m_InputWarnings;         // Tap warnings need to be on for the intro and outro but off for the game itself.
         [SerializeField] private GameConfiguration m_GameConfiguration;
+        [SerializeField] private VRInput m_VRInput;
 
         private float m_SpawnProbability;                               // The current probability that a target will spawn at the next interval.
         private float m_ProbabilityDelta;                               // The difference to the probability caused by a target spawning or despawning.
         private List<TargetType>.Enumerator m_TargetSequence;
 
-        private int m_OutstandingTargetCount = 0;
+        private List<ShootingTarget> m_OutstandingTargets = new List<ShootingTarget>();
 
         public bool IsPlaying { get; private set; }                     // Whether or not the game is currently playing.
 
@@ -42,7 +44,28 @@ namespace VRStandardAssets.ShootingGallery
             SessionData.RestoreLastGameData();
         }
 
-        private IEnumerator Start()
+        private void OnEnable()
+        {
+            m_VRInput.OnCancel += HandleCancel;
+        }
+
+        private void OnDisable()
+        {
+            m_VRInput.OnCancel -= HandleCancel;
+        }
+
+        private void HandleCancel()
+        {
+            StopAllCoroutines();
+            foreach(var target in m_OutstandingTargets)
+            {
+                target.Pause();
+            }
+
+            StartCoroutine(InitializeGame());
+        }
+
+        private void Start()
         {
             // Set the game type for the score to be recorded correctly.
             SessionData.Restart();
@@ -52,6 +75,11 @@ namespace VRStandardAssets.ShootingGallery
             // So if there are no targets, the probability of one spawning will be 1, then 0.94, then 0.88, etc.
             m_ProbabilityDelta = (1f - m_BaseSpawnProbability) / m_IdealTargetNumber;
 
+            StartCoroutine(InitializeGame());
+        }
+
+        private IEnumerator InitializeGame()
+        {
             yield return StartCoroutine(StartGame());
 
             // Continue looping through all the phases.
@@ -77,6 +105,9 @@ namespace VRStandardAssets.ShootingGallery
 
         private IEnumerator StartGame()
         {
+            // Show VR buttons
+            m_WaveSelectionController.ShowWaveButtons();
+
             // Wait for the intro UI to fade in.
             yield return StartCoroutine(m_UIController.ShowIntroUI());
 
@@ -94,6 +125,11 @@ namespace VRStandardAssets.ShootingGallery
 
         private IEnumerator StartWave ()
         {
+            foreach (var target in m_OutstandingTargets)
+            {
+                target.Resume();
+            }
+
             UpdateLevelInfo();
 
             // Turn off the tap warnings since it will now be tap to fire.
@@ -186,7 +222,7 @@ namespace VRStandardAssets.ShootingGallery
                 if (spawnTimer <= 0f)
                 {
                     // If it's time to spawn, check if a spawn should happen based on the probability.
-                    if (Random.value < m_SpawnProbability)
+                    if (UnityEngine.Random.value < m_SpawnProbability)
                     {
                         // If a spawn should happen, restart the timer for spawning.
                         spawnTimer = m_SpawnInterval;
@@ -199,7 +235,7 @@ namespace VRStandardAssets.ShootingGallery
 
                         if (!m_TargetSequence.MoveNext())
                         {
-                            while(m_OutstandingTargetCount > 0)
+                            while(m_OutstandingTargets.Count > 0)
                             {
                                 // Wait until all the targets are either destroyed or out of the players view
                                 yield return null;
@@ -220,8 +256,6 @@ namespace VRStandardAssets.ShootingGallery
         
         private void Spawn (float timeRemaining, TargetType targetType)
         {
-            m_OutstandingTargetCount++;
-
             // Get a reference to a target instance from the object pool.
             GameObject target = m_TargetObjectPool.GetGameObjectFromPool (targetType);
 
@@ -234,6 +268,8 @@ namespace VRStandardAssets.ShootingGallery
 
             // Subscribe to the OnRemove event.
             shootingTarget.OnRemove += HandleTargetRemoved;
+
+            m_OutstandingTargets.Add(shootingTarget);
         }
 
 
@@ -244,9 +280,9 @@ namespace VRStandardAssets.ShootingGallery
             Vector3 extents = m_SpawnCollider.bounds.extents;
 
             // Get a random value between the extents on each axis.
-            float x = Random.Range(center.x - extents.x, center.x + extents.x);
-            float y = Random.Range(center.y - extents.y, center.y + extents.y);
-            float z = Random.Range(center.z - extents.z, center.z + extents.z);
+            float x = UnityEngine.Random.Range(center.x - extents.x, center.x + extents.x);
+            float y = UnityEngine.Random.Range(center.y - extents.y, center.y + extents.y);
+            float z = UnityEngine.Random.Range(center.z - extents.z, center.z + extents.z);
 
             // Return the point these random values make.
             return new Vector3(x, y, z);
@@ -255,9 +291,10 @@ namespace VRStandardAssets.ShootingGallery
 
         private void HandleTargetRemoved(ShootingTarget target)
         {
-            m_OutstandingTargetCount--;
             // Now that the event has been hit, unsubscribe from it.
             target.OnRemove -= HandleTargetRemoved;
+
+            m_OutstandingTargets.Remove(target);
 
             // Return the target to it's object pool.
             m_TargetObjectPool.ReturnGameObjectToPool (target.gameObject);
