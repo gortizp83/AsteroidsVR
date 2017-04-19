@@ -94,12 +94,18 @@ namespace VRStandardAssets.Common
             s_Score.AddScore(type);
         }
 
-        private static void SaveGame()
+        public static void SaveGame()
         {
             // Set the high score for the current game's name and save it.
             PlayerPrefs.SetInt(k_LastLevel, s_Level);
             PlayerPrefs.SetInt(k_LastWave, s_Wave);
             PlayerPrefs.Save();
+        }
+
+        public static void RestoreLastGameData()
+        {
+            s_Level = PlayerPrefs.GetInt(k_LastLevel, 1);
+            s_Wave = PlayerPrefs.GetInt(k_LastWave, 1);
         }
     }
 }

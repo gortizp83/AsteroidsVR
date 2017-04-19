@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using VRStandardAssets.Common;
 using VRStandardAssets.Utils;
 
 public class WaveSelectionController : MonoBehaviour {
@@ -13,7 +14,7 @@ public class WaveSelectionController : MonoBehaviour {
     // Use this for initialization
     void Start ()
     {
-        for (int i = 0; i < 5; i++)
+        for (int i = 0; i < SessionData.Wave; i++)
         {
             var newButton = Instantiate(m_VRButonPrefab);
             newButton.GetComponent<VRButton>().VRInput = m_VRInput;

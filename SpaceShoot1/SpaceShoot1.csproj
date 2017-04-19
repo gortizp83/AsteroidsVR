@@ -85,6 +85,8 @@
     <Compile Include="Assets\Earth\Scripts\EarthScript.cs" />
     <Compile Include="Assets\Earth\Scripts\MoveScript.cs" />
     <Compile Include="Assets\Earth\Scripts\SphereScript.cs" />
+    <Compile Include="Assets\GapstopController.cs" />
+    <Compile Include="Assets\VRButton.cs" />
     <Compile Include="Assets\VRSampleScenes\Scripts\Common\GameScore.cs" />
     <Compile Include="Assets\VRSampleScenes\Scripts\Common\SessionData.cs" />
     <Compile Include="Assets\VRSampleScenes\Scripts\Examples\ExampleInteractiveItem.cs" />
@@ -121,6 +123,7 @@
     <Compile Include="Assets\VRSampleScenes\Scripts\ShootingGallery\UIController.cs" />
     <Compile Include="Assets\VRSampleScenes\Scripts\ShootingGallery\WaveConfiguration.cs" />
     <Compile Include="Assets\VRSampleScenes\Scripts\ShootingGallery\WaveResult.cs" />
+    <Compile Include="Assets\VRSampleScenes\Scripts\Utils\BigFireSlider.cs" />
     <Compile Include="Assets\VRSampleScenes\Scripts\Utils\GUIArrows.cs" />
     <Compile Include="Assets\VRSampleScenes\Scripts\Utils\InputWarnings.cs" />
     <Compile Include="Assets\VRSampleScenes\Scripts\Utils\ObjectPool.cs" />
@@ -141,6 +144,7 @@
     <Compile Include="Assets\VRStandardAssets\Scripts\VRInput.cs" />
     <Compile Include="Assets\VRStandardAssets\Scripts\VRInteractiveItem.cs" />
     <Compile Include="Assets\VRStandardAssets\Scripts\VRTrackingReset.cs" />
+    <Compile Include="Assets\WaveSelectionController.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\Earth\Materials\EarthShader.shader" />
