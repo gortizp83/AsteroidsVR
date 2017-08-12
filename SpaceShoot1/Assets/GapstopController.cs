@@ -6,18 +6,20 @@ using VRStandardAssets.Utils;
 
 public class GapstopController : MonoBehaviour {
 
-    [SerializeField] private VRInput m_VRInput;                         // Reference to the VRInput to detect button presses.
+    [SerializeField]
+    private VRInput m_VRInput;                         // Reference to the VRInput to detect button presses.
+
+    [SerializeField]
+    private BigFireSlider[] m_slider;
 
     public event Action<int> OnGapstopFilled;
-
-    private BigFireSlider[] m_slider;
     private List<Coroutine> m_WaitForBarToFillCorroutines = new List<Coroutine>();
     int m_GapstopCount = 0;
 
     // Use this for initialization
     void Start ()
     {
-        m_slider = this.GetComponentsInChildren<BigFireSlider>();
+        //m_slider = this.GetComponentsInChildren<BigFireSlider>();
     }
 
     private void OnEnable()
@@ -61,10 +63,4 @@ public class GapstopController : MonoBehaviour {
             OnGapstopFilled(m_GapstopCount);
         }
     }
-
-    // Update is called once per frame
-    void Update ()
-    {
-
-	}
 }

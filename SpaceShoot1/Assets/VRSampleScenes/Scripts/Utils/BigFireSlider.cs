@@ -15,17 +15,17 @@ namespace VRStandardAssets.Utils
         public event Action OnBarFilled;                                    // This event is triggered when the bar finishes filling.
 
 
-        [SerializeField] private float m_Duration = 2f;                     // The length of time it takes for the bar to fill.
-        [SerializeField] private AudioSource m_Audio;                       // Reference to the audio source that will play effects when the user looks at it and when it fills.
-        [SerializeField] private AudioClip m_OnFilledClip;                  // The clip to play when the bar finishes filling.
+        [SerializeField] protected float m_Duration = 2f;                     // The length of time it takes for the bar to fill.
+        [SerializeField] protected AudioSource m_Audio;                       // Reference to the audio source that will play effects when the user looks at it and when it fills.
+        [SerializeField] protected AudioClip m_OnFilledClip;                  // The clip to play when the bar finishes filling.
         //[SerializeField] private AudioClip m_OnFillingClip;                  // The clip to play when the bar finishes filling.
-        [SerializeField] private Slider m_Slider;                           // Optional reference to the UI slider (unnecessary if using a standard Renderer).
-        [SerializeField] private VRInput m_VRInput;                         // Reference to the VRInput to detect button presses.
-        [SerializeField] private GameObject m_BarCanvas;                    // Optional reference to the GameObject that holds the slider (only necessary if DisappearOnBarFill is true).
-        [SerializeField] private Renderer m_Renderer;                       // Optional reference to a renderer (unnecessary if using a UI slider).
-        [SerializeField] private UIFader m_UIFader;                         // Optional reference to a UIFader, used if the SelectionSlider needs to fade out.
-        [SerializeField] private bool m_DisableOnBarFill;                   // Whether the bar should stop reacting once it's been filled (for single use bars).
-        [SerializeField] private bool m_DisappearOnBarFill;                 // Whether the bar should disappear instantly once it's been filled.
+        [SerializeField] protected Slider m_Slider;                           // Optional reference to the UI slider (unnecessary if using a standard Renderer).
+        [SerializeField] protected VRInput m_VRInput;                         // Reference to the VRInput to detect button presses.
+        [SerializeField] protected GameObject m_BarCanvas;                    // Optional reference to the GameObject that holds the slider (only necessary if DisappearOnBarFill is true).
+        [SerializeField] protected Renderer m_Renderer;                       // Optional reference to a renderer (unnecessary if using a UI slider).
+        [SerializeField] protected UIFader m_UIFader;                         // Optional reference to a UIFader, used if the SelectionSlider needs to fade out.
+        [SerializeField] protected bool m_DisableOnBarFill;                   // Whether the bar should stop reacting once it's been filled (for single use bars).
+        [SerializeField] protected bool m_DisappearOnBarFill;                 // Whether the bar should disappear instantly once it's been filled.
 
 
         private bool m_BarFilled;                                           // Whether the bar is currently filled.
@@ -54,7 +54,6 @@ namespace VRStandardAssets.Utils
                 m_VRInput.OnUp -= HandleUp;
             }
         }
-
 
         private void Update ()
         {
@@ -134,15 +133,14 @@ namespace VRStandardAssets.Utils
                 enabled = false;
         }
 
-
-        private void SetSliderValue (float sliderValue)
+        protected virtual void SetSliderValue (float sliderValue)
         {
             // If there is a slider component set it's value to the given slider value.
             if (m_Slider)
                 m_Slider.value = sliderValue;
 
             // If there is a renderer set the shader's property to the given slider value.
-            if(m_Renderer)
+            if (m_Renderer)
                 m_Renderer.sharedMaterial.SetFloat (k_SliderMaterialPropertyName, sliderValue);
         }
 
