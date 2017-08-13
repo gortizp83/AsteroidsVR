@@ -142,6 +142,7 @@
     <Compile Include="Assets\VRSampleScenes\Scripts\Utils\UIFader.cs" />
     <Compile Include="Assets\VRSampleScenes\Scripts\Utils\UIMovement.cs" />
     <Compile Include="Assets\VRSampleScenes\Scripts\Utils\UITint.cs" />
+    <Compile Include="Assets\VRSampleScenes\Scripts\Utils\UnityEditorDebug.cs" />
     <Compile Include="Assets\VRSampleScenes\Scripts\Utils\VRCameraFade.cs" />
     <Compile Include="Assets\VRSampleScenes\Scripts\Utils\VRCameraUI.cs" />
     <Compile Include="Assets\VRStandardAssets\Scripts\VRDebugUtilities.cs" />

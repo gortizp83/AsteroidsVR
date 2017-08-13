@@ -403,12 +403,12 @@ MonoBehaviour:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 214402339}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f2f5e51970acd1b45820cc3a8f7895f5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_MouseLookEnabled: 1
+  m_MouseLookEnabled: 0
   m_MouseLook:
     XSensitivity: 2
     YSensitivity: 2
@@ -427,8 +427,7 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children:
-  - {fileID: 2046500878}
+  m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -578,7 +577,7 @@ RectTransform:
   m_GameObject: {fileID: 251841215}
   m_LocalRotation: {x: -0.000000029802322, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 1.5, y: 1.5, z: 1.5}
   m_Children:
   - {fileID: 1206327374}
   m_Father: {fileID: 520928583}
@@ -891,7 +890,7 @@ Transform:
   m_GameObject: {fileID: 520928582}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 6.3}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0.15, y: 0.15, z: 0.15}
   m_Children:
   - {fileID: 814326903}
   - {fileID: 251841216}
@@ -4826,7 +4825,7 @@ ParticleSystem:
   moveWithTransform: 1
   moveWithCustomTransform: {fileID: 0}
   scalingMode: 2
-  randomSeed: -187471443
+  randomSeed: 2072607938
   InitialModule:
     serializedVersion: 3
     enabled: 1
@@ -8177,8 +8176,8 @@ Transform:
   m_Children:
   - {fileID: 566048699}
   - {fileID: 520928583}
-  m_Father: {fileID: 214402341}
-  m_RootOrder: 0
+  m_Father: {fileID: 0}
+  m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &2046500879
 MonoBehaviour:
@@ -8198,7 +8197,7 @@ MonoBehaviour:
     m_Bits: 4
   m_Reticle: {fileID: 2046500881}
   m_VrInput: {fileID: 2046500880}
-  m_ShowDebugRay: 0
+  m_ShowDebugRay: 1
   m_DebugRayLength: 5
   m_DebugRayDuration: 1
   m_RayLength: 500

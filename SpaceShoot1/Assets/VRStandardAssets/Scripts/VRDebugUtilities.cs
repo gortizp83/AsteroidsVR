@@ -10,9 +10,24 @@ public class VRDebugUtilities : MonoBehaviour
 
     private Camera m_Camera;
 
+//    private void Awake()
+//    {
+//#if UNITY_EDITOR
+//        var parent = transform.parent;
+//        var mainCamera = parent.Find("MainCamera");
+//        mainCamera.transform.parent = this.transform;
+//#endif
+//    }
+
     // Use this for initialization
     void Start ()
     {
+//#if UNITY_EDITOR
+//        //var parent = transform.parent;
+//        var mainCamera = transform.Find("MainCamera");
+//        mainCamera.transform.parent = this.transform;
+//#endif
+
         m_Camera = Camera.main;
         m_MouseLook.Init(transform, m_Camera.transform);
     }

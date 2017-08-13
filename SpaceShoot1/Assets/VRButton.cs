@@ -99,11 +99,12 @@ public class VRButton : MonoBehaviour {
 
     private void OnDisable()
     {
-        VRInput.OnDown -= HandleDown;
-        VRInput.OnUp -= HandleUp;
+        //VRInput.OnDown -= HandleDown;
+        //VRInput.OnUp -= HandleUp;
 
         m_InteractiveItem.OnOver -= HandleOver;
         m_InteractiveItem.OnOut -= HandleOut;
+        m_InteractiveItem.OnClick += HandleDown;
     }
 
     private void OnDestroy()
