@@ -23,7 +23,9 @@ namespace VRStandardAssets.ShootingGallery
         [SerializeField] private SelectionRadial m_SelectionRadial;     // Used to continue past the outro.
         [SerializeField] private Reticle m_Reticle;                     // This is turned on and off when it is required and not.
         [SerializeField] private ObjectPool m_TargetObjectPool;         // The object pool that stores all the targets.
-        [SerializeField] private BoxCollider m_SpawnCollider;           // For the 180 shooter, the volume that the targets can spawn within.
+        [SerializeField] private BoxCollider m_frontSpawnCollider;      // The volume that the targets can spawn within.
+        [SerializeField] private BoxCollider m_frontRightSpawnCollider;      // The volume that the targets can spawn within.
+        [SerializeField] private BoxCollider m_rightSpawnCollider;      // The volume that the targets can spawn within.
         [SerializeField] private UIController m_UIController;           // Used to encapsulate the UI.
         [SerializeField] private InputWarnings m_InputWarnings;         // Tap warnings need to be on for the intro and outro but off for the game itself.
         [SerializeField] private GameConfiguration m_GameConfiguration;
@@ -31,7 +33,7 @@ namespace VRStandardAssets.ShootingGallery
 
         private float m_SpawnProbability;                               // The current probability that a target will spawn at the next interval.
         private float m_ProbabilityDelta;                               // The difference to the probability caused by a target spawning or despawning.
-        private List<TargetType>.Enumerator m_TargetSequence;
+        private List<TargetConfiguration>.Enumerator m_TargetSequence;
 
         private List<ShootingTarget> m_OutstandingTargets = new List<ShootingTarget>();
 
@@ -249,17 +251,19 @@ namespace VRStandardAssets.ShootingGallery
             }
         }
         
-        private void Spawn (float timeRemaining, TargetType targetType)
+        private void Spawn (float timeRemaining, TargetConfiguration targetConfig)
         {
             // Get a reference to a target instance from the object pool.
-            GameObject target = m_TargetObjectPool.GetGameObjectFromPool (targetType);
+            GameObject target = m_TargetObjectPool.GetGameObjectFromPool (targetConfig.Type);
 
             // Set the target's position to a random position. 
-            target.transform.position = SpawnPosition();
+            target.transform.position = SpawnPosition(targetConfig.SpawnPosition);
 
             // Find a reference to the ShootingTarget script on the target gameobject and call it's Restart function.
             ShootingTarget shootingTarget = target.GetComponent<ShootingTarget>();
             shootingTarget.Restart(timeRemaining);
+            // Set the direction of the movement for the new shooting target the same as the forward direction the spawn collider is facing
+            shootingTarget.ForwardDirection = m_frontSpawnCollider.transform.forward;
 
             // Subscribe to the OnRemove event.
             shootingTarget.OnRemove += HandleTargetRemoved;
@@ -267,11 +271,29 @@ namespace VRStandardAssets.ShootingGallery
             m_OutstandingTargets.Add(shootingTarget);
         }
 
-        private Vector3 SpawnPosition ()
+        private Vector3 SpawnPosition (TargetSpawnPosition spawnPosition)
         {
+            BoxCollider spawnCollider;
+
+            switch (spawnPosition)
+            {
+                case TargetSpawnPosition.Front:
+                    spawnCollider = m_frontSpawnCollider;
+                    break;
+                case TargetSpawnPosition.FrontRight:
+                    spawnCollider = m_frontRightSpawnCollider;
+                    break;
+                case TargetSpawnPosition.Right:
+                    spawnCollider = m_rightSpawnCollider;
+                    break;
+                default:
+                    spawnCollider = m_frontSpawnCollider;
+                    break;
+            }
+
             // Find the centre and extents of the spawn collider.
-            Vector3 center = m_SpawnCollider.bounds.center;
-            Vector3 extents = m_SpawnCollider.bounds.extents;
+            Vector3 center = spawnCollider.bounds.center;
+            Vector3 extents = spawnCollider.bounds.extents;
 
             // Get a random value between the extents on each axis.
             float x = UnityEngine.Random.Range(center.x - extents.x, center.x + extents.x);

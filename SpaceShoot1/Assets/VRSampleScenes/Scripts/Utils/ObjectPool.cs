@@ -17,10 +17,8 @@ namespace VRStandardAssets.Utils
 
         private void Awake ()
         {
-            // Add as many random variations to the pool as initially determined.
-            for (int i = 0; i < m_Prefabs.Length; i++)
+            foreach(var prefab in m_Prefabs)
             {
-                var prefab = m_Prefabs[i];
                 var type = prefab.GetComponent<ShootingTarget>().Type;
                 m_PrefabDictionary.Add(prefab.GetComponent<ShootingTarget>().Type, prefab);
                 for (int j = 0; j < m_NumberInPool; j++)
@@ -29,7 +27,6 @@ namespace VRStandardAssets.Utils
                 }
             }
         }
-
 
         private void AddToPool (TargetType targetType)
         {

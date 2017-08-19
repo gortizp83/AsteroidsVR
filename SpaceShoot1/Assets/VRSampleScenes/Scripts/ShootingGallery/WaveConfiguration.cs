@@ -7,9 +7,9 @@ public class WaveConfiguration
 {
     private int m_WaveNumber;
     private GameScore m_MinScoreToPass;
-    private List<TargetType> m_targetSequence;
+    private List<TargetConfiguration> m_targetSequence;
 
-    public WaveConfiguration(int waveNumber, GameScore minScoreToPass, List<TargetType> targetSequence)
+    public WaveConfiguration(int waveNumber, GameScore minScoreToPass, List<TargetConfiguration> targetSequence)
     {
         m_WaveNumber = waveNumber;
         m_MinScoreToPass = minScoreToPass;
@@ -28,7 +28,7 @@ public class WaveConfiguration
         set { m_MinScoreToPass = value; }
     }
 
-    public List<TargetType> TargetSequence
+    public List<TargetConfiguration> TargetSequence
     {
         get
         {

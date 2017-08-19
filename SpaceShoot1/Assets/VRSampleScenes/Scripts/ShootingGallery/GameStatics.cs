@@ -16,26 +16,26 @@ internal class GameStatics
         LevelConfiguration level1 = new LevelConfiguration(levelCount++);
 
         // Wave 1
-        List<TargetType> wave1 = GenerateTargetSequence(10, TargetType.Easy);
+        List<TargetConfiguration> wave1 = GenerateTargetSequence(10, TargetType.Easy);
         GameScore gameScore1 = new GameScore();
         gameScore1.SetScore(TargetType.Easy, 10);
         level1.WaveConfig.Add(new WaveConfiguration(waveCounter++, gameScore1, wave1));
 
         // Wave 2
-        List<TargetConfig> targetConfig = new List<TargetConfig>();
-        targetConfig.Add(new TargetConfig(10, TargetType.Easy));
-        targetConfig.Add(new TargetConfig(5, TargetType.Medium));
-        List<TargetType> wave2 = new List<TargetType>(GenerateRandomSequence(targetConfig));
+        List<SequenceCofig> squenceConfig = new List<SequenceCofig>();
+        squenceConfig.Add(new SequenceCofig(10, TargetType.Easy));
+        squenceConfig.Add(new SequenceCofig(5, TargetType.Medium));
+        List<TargetConfiguration> wave2 = new List<TargetConfiguration>(GenerateRandomSequence(squenceConfig));
         GameScore gameScore2 = new GameScore();
         gameScore2.SetScore(TargetType.Easy, 10);
         gameScore2.SetScore(TargetType.Medium, 5);
         level1.WaveConfig.Add(new WaveConfiguration(waveCounter++, gameScore2, wave2));
 
         // Wave 3
-        List<TargetConfig> targetConfig2 = new List<TargetConfig>();
-        targetConfig2.Add(new TargetConfig(10, TargetType.Medium));
-        targetConfig2.Add(new TargetConfig(5, TargetType.Hard));
-        List<TargetType> wave3 = new List<TargetType>(GenerateRandomSequence(targetConfig2));
+        List<SequenceCofig> targetConfig2 = new List<SequenceCofig>();
+        targetConfig2.Add(new SequenceCofig(10, TargetType.Medium));
+        targetConfig2.Add(new SequenceCofig(5, TargetType.Hard));
+        List<TargetConfiguration> wave3 = new List<TargetConfiguration>(GenerateRandomSequence(targetConfig2));
         GameScore gameScore3 = new GameScore();
         gameScore3.SetScore(TargetType.Medium, 10);
         gameScore3.SetScore(TargetType.Hard, 5);
@@ -45,28 +45,28 @@ internal class GameStatics
         return levels;
     }
 
-    private static List<TargetType> GenerateTargetSequence(int targetCount, TargetType targetType)
+    private static List<TargetConfiguration> GenerateTargetSequence(int targetCount, TargetType targetType)
     {
-        List<TargetType> targets = new List<TargetType>();
+        List<TargetConfiguration> targets = new List<TargetConfiguration>();
         
         for (int i = 0; i != targetCount; i++)
         {
-            targets.Add(targetType);
+            targets.Add(new TargetConfiguration(targetType));
         }
 
         return targets;
     }
 
-    private static List<TargetType> GenerateRandomSequence(IEnumerable<TargetConfig> targetConfigList)
+    private static List<TargetConfiguration> GenerateRandomSequence(IEnumerable<SequenceCofig> squenceConfigurations)
     {
-        SortedDictionary<int, TargetType> sequence = new SortedDictionary<int, TargetType>();
+        SortedDictionary<int, TargetConfiguration> sequence = new SortedDictionary<int, TargetConfiguration>();
 
         Random random = new Random();
         
 
-        foreach (TargetConfig targetConfig in targetConfigList)
+        foreach (SequenceCofig configuration in squenceConfigurations)
         {
-            for (int i = 0; i != targetConfig.Count; i++)
+            for (int i = 0; i != configuration.CountOfItemsToCreate; i++)
             {
                 int key = random.Next();
 
@@ -75,11 +75,11 @@ internal class GameStatics
                     key = random.Next();
                 }
 
-                sequence.Add(key, targetConfig.Type);
+                sequence.Add(key, new TargetConfiguration(configuration.Type));
             }
         }
 
-        List<TargetType> targets = new List<TargetType>();
+        List<TargetConfiguration> targets = new List<TargetConfiguration>();
         foreach(var item in sequence)
         {
             targets.Add(item.Value);
@@ -88,9 +88,9 @@ internal class GameStatics
         return targets;
     }
 
-    private class TargetConfig
+    private class SequenceCofig
     {
-        public TargetConfig(int count, TargetType type)
+        public SequenceCofig(int count, TargetType type)
         {
             m_count = count;
             m_type = type;
@@ -107,7 +107,7 @@ internal class GameStatics
 
         private int m_count;
 
-        public int Count
+        public int CountOfItemsToCreate
         {
             get { return m_count; }
             set { m_count = value; }

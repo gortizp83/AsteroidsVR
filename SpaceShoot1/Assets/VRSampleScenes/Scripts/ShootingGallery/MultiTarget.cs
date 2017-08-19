@@ -42,7 +42,7 @@ public class MultiTarget : ShootingTarget {
             var child = this.transform.GetChild(i);
             child.GetComponent<ShootingTarget>().IgnoreHit = false;
             var newTargetSpeed = Random.Range(TargetSpeed * (1 - speedDeviation), TargetSpeed * (1 + speedDeviation));
-            child.GetComponent<ShootingTarget>().TargetSpeed = newTargetSpeed * speedMuliplier;
+            base.TargetSpeed = newTargetSpeed * speedMuliplier;
 
             var item = child.GetComponent<VRInteractiveItem>();
             //item.OnDown -= HandleDown;

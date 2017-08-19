@@ -6,16 +6,6 @@ using VRStandardAssets.Utils;
 
 namespace VRStandardAssets.ShootingGallery
 {
-    public enum TargetType
-    {
-        Easy,
-        Medium,
-        Hard,
-        EasyDouble,
-        MediumDouble,
-        HardDouble,
-    }
-
     // This script handles a target in the shooter scenes.
     // It includes what should happen when it is hit and
     // how long before it despawns.
@@ -46,6 +36,7 @@ namespace VRStandardAssets.ShootingGallery
         protected int m_CurrentLifePoints;
         private bool m_IgnoreHit = false;
         private bool m_IsPaused = false;
+        private Vector3 m_forwardDirection = Vector3.forward;
 
         public TargetType Type
         {
@@ -68,7 +59,7 @@ namespace VRStandardAssets.ShootingGallery
             }
         }
 
-        public float TargetSpeed
+        protected float TargetSpeed
         {
             get
             {
@@ -80,6 +71,20 @@ namespace VRStandardAssets.ShootingGallery
                 m_TargetSpeed = value;
             }
         }
+
+        public Vector3 ForwardDirection
+        {
+            get
+            {
+                return m_forwardDirection;
+            }
+
+            set
+            {
+                m_forwardDirection = value;
+            }
+        }
+
 
         public void Pause()
         {
@@ -101,7 +106,7 @@ namespace VRStandardAssets.ShootingGallery
 
         public override void DoUpdate()
         {
-            this.transform.Translate(Vector3.forward * Time.deltaTime * TargetSpeed);
+            this.transform.Translate(ForwardDirection * Time.deltaTime * TargetSpeed);
 
             this.transform.localScale = new Vector3(m_SpawnScale, m_SpawnScale, m_SpawnScale);
 
