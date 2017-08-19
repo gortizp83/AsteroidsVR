@@ -16,8 +16,8 @@ namespace VRStandardAssets.ShootingGallery
             {
                 var targetType = scoreUI.TargetType;
 
-                float score = SessionData.Score.GetScore(targetType);
-                float minScoreToPass = SessionData.MinScoreToPassWave.GetScore(targetType);
+                float score = SessionData.Score.GetCurrentScore(targetType);
+                float minScoreToPass = SessionData.MinScoreToPassWave.GetCurrentScore(targetType);
                 scoreUI.ScoreText.text = string.Format("{0}/{1}", score, minScoreToPass);
                 // Set the timer bar to be filled by the amount 
                 scoreUI.TimerBar.fillAmount = score / minScoreToPass;

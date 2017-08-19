@@ -15,6 +15,14 @@ internal class GameStatics
         // Level 1
         LevelConfiguration level1 = new LevelConfiguration(levelCount++);
 
+#if UNITY_EDITOR
+        // Wave Debug
+        List<TargetConfiguration> waveDebug = GenerateTargetSequence(200, TargetType.Easy, TargetSpawnPosition.Right);
+        waveDebug.AddRange(GenerateTargetSequence(2, TargetType.Easy, TargetSpawnPosition.FrontRight));
+        waveDebug.AddRange(GenerateTargetSequence(200, TargetType.Easy, TargetSpawnPosition.Right));
+        level1.WaveConfig.Add(new WaveConfiguration(waveCounter++,  waveDebug));
+#endif
+
         // Wave 1
         List<TargetConfiguration> wave1 = GenerateTargetSequence(10, TargetType.Easy);
         GameScore gameScore1 = new GameScore();
@@ -45,13 +53,13 @@ internal class GameStatics
         return levels;
     }
 
-    private static List<TargetConfiguration> GenerateTargetSequence(int targetCount, TargetType targetType)
+    private static List<TargetConfiguration> GenerateTargetSequence(int targetCount, TargetType targetType, TargetSpawnPosition spawnPosition = TargetSpawnPosition.Front)
     {
         List<TargetConfiguration> targets = new List<TargetConfiguration>();
         
         for (int i = 0; i != targetCount; i++)
         {
-            targets.Add(new TargetConfiguration(targetType));
+            targets.Add(new TargetConfiguration(targetType, spawnPosition));
         }
 
         return targets;
@@ -75,7 +83,7 @@ internal class GameStatics
                     key = random.Next();
                 }
 
-                sequence.Add(key, new TargetConfiguration(configuration.Type));
+                sequence.Add(key, configuration.TargetConfiguration);
             }
         }
 
@@ -88,30 +96,21 @@ internal class GameStatics
         return targets;
     }
 
-    private class SequenceCofig
+    private struct SequenceCofig
     {
-        public SequenceCofig(int count, TargetType type)
+        public SequenceCofig(int countOfItemsToCreate, TargetType targetType)
         {
-            m_count = count;
-            m_type = type;
+            CountOfItemsToCreate = countOfItemsToCreate;
+            TargetConfiguration = new TargetConfiguration(targetType);
         }
 
-        private TargetType m_type;
-
-        public TargetType Type
+        public SequenceCofig(int countOfItemsToCreate, TargetConfiguration targetConfiguration)
         {
-            get { return m_type; }
-            set { m_type = value; }
+            CountOfItemsToCreate = countOfItemsToCreate;
+            TargetConfiguration = targetConfiguration;
         }
 
-
-        private int m_count;
-
-        public int CountOfItemsToCreate
-        {
-            get { return m_count; }
-            set { m_count = value; }
-        }
-
+        public TargetConfiguration TargetConfiguration;
+        public int CountOfItemsToCreate;
     }
 }

@@ -257,13 +257,11 @@ namespace VRStandardAssets.ShootingGallery
             GameObject target = m_TargetObjectPool.GetGameObjectFromPool (targetConfig.Type);
 
             // Set the target's position to a random position. 
-            target.transform.position = SpawnPosition(targetConfig.SpawnPosition);
+            SetTargetSpawnProperties(targetConfig.SpawnPosition, ref target);
 
             // Find a reference to the ShootingTarget script on the target gameobject and call it's Restart function.
             ShootingTarget shootingTarget = target.GetComponent<ShootingTarget>();
             shootingTarget.Restart(timeRemaining);
-            // Set the direction of the movement for the new shooting target the same as the forward direction the spawn collider is facing
-            shootingTarget.ForwardDirection = m_frontSpawnCollider.transform.forward;
 
             // Subscribe to the OnRemove event.
             shootingTarget.OnRemove += HandleTargetRemoved;
@@ -271,9 +269,10 @@ namespace VRStandardAssets.ShootingGallery
             m_OutstandingTargets.Add(shootingTarget);
         }
 
-        private Vector3 SpawnPosition (TargetSpawnPosition spawnPosition)
+        private void SetTargetSpawnProperties (TargetSpawnPosition spawnPosition, ref GameObject target)
         {
             BoxCollider spawnCollider;
+            ShootingTarget shootingTarget = target.GetComponent<ShootingTarget>();
 
             switch (spawnPosition)
             {
@@ -300,8 +299,10 @@ namespace VRStandardAssets.ShootingGallery
             float y = UnityEngine.Random.Range(center.y - extents.y, center.y + extents.y);
             float z = UnityEngine.Random.Range(center.z - extents.z, center.z + extents.z);
 
-            // Return the point these random values make.
-            return new Vector3(x, y, z);
+            target.transform.position = new Vector3(x, y, z);
+
+            // Set the direction of the movement for the new shooting target the same as the forward direction the spawn collider is facing
+            shootingTarget.ForwardDirection = spawnCollider.transform.forward;
         }
 
         private void HandleTargetRemoved(ShootingTarget target)

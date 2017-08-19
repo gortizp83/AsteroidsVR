@@ -91,7 +91,7 @@ namespace VRStandardAssets.Common
         public static void AddScore(TargetType type)
         {
             // Add to the current score and check if the high score needs to be set.
-            s_Score.AddScore(type);
+            s_Score.AddToScore(type);
         }
 
         public static void SaveGame()

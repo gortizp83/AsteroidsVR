@@ -15,7 +15,7 @@ namespace VRStandardAssets.Common
             foreach (var value in values)
             {
                 TargetType type = (TargetType)value;
-                if (first.GetScore(type) > second.GetScore(type))
+                if (first.GetCurrentScore(type) > second.GetCurrentScore(type))
                 {
                     return false;
                 }
@@ -31,7 +31,7 @@ namespace VRStandardAssets.Common
             foreach (var value in values)
             {
                 TargetType type = (TargetType)value;
-                if (first.GetScore(type) < second.GetScore(type))
+                if (first.GetCurrentScore(type) < second.GetCurrentScore(type))
                 {
                     return false;
                 }
@@ -40,7 +40,7 @@ namespace VRStandardAssets.Common
             return true;
         }
 
-        public void AddScore(TargetType targetType)
+        public void AddToScore(TargetType targetType)
         {
             if (m_ScoreMap.ContainsKey(targetType))
             {
@@ -52,7 +52,7 @@ namespace VRStandardAssets.Common
             }
         }
 
-        public int GetScore(TargetType targetType)
+        public int GetCurrentScore(TargetType targetType)
         {
             if (m_ScoreMap.ContainsKey(targetType))
             {

@@ -299,7 +299,7 @@ MonoBehaviour:
   m_SelectionRadial: {fileID: 2046500885}
   m_Reticle: {fileID: 2046500881}
   m_TargetObjectPool: {fileID: 802776861}
-  m_frontSpawnCollider: {fileID: 2060608448}
+  m_frontSpawnCollider: {fileID: 469716549}
   m_frontRightSpawnCollider: {fileID: 2060608448}
   m_rightSpawnCollider: {fileID: 2118391599}
   m_UIController: {fileID: 752797878}
@@ -879,7 +879,7 @@ GameObject:
   - component: {fileID: 469716548}
   - component: {fileID: 469716549}
   m_Layer: 2
-  m_Name: RightSpawnCollider
+  m_Name: SpawnColliderFront
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -909,6 +909,22 @@ BoxCollider:
   m_Enabled: 1
   serializedVersion: 2
   m_Size: {x: 12, y: 4, z: 20}
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!1 &470326381 stripped
+GameObject:
+  m_PrefabParentObject: {fileID: 157262, guid: c2e22098ce7c8da4590cceb5113bd50e, type: 2}
+  m_PrefabInternal: {fileID: 175989413}
+--- !u!135 &470326382
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 470326381}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 20
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &520928582
 GameObject:
@@ -8314,7 +8330,7 @@ GameObject:
   - component: {fileID: 2060608450}
   - component: {fileID: 2060608448}
   m_Layer: 2
-  m_Name: FrontSpawnCollider
+  m_Name: SpawnColliderFrontRight
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -8338,13 +8354,13 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 2060608446}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 2.5, z: 60}
+  m_LocalRotation: {x: 0, y: 0.29945707, z: 0, w: 0.95410985}
+  m_LocalPosition: {x: 30, y: 2.5, z: 50}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 163866254}
   m_RootOrder: 1
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 34.85, z: 0}
 --- !u!1 &2118391597
 GameObject:
   m_ObjectHideFlags: 0
@@ -8355,7 +8371,7 @@ GameObject:
   - component: {fileID: 2118391598}
   - component: {fileID: 2118391599}
   m_Layer: 2
-  m_Name: FrontRightSpawnCollider
+  m_Name: SpawnColliderRight
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -8367,13 +8383,13 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 2118391597}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 2.5, z: 60}
+  m_LocalRotation: {x: 0, y: 0.19080894, z: 0, w: 0.9816273}
+  m_LocalPosition: {x: 52, y: 0, z: 26.6}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 163866254}
   m_RootOrder: 2
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 22, z: 0}
 --- !u!65 &2118391599
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -8384,7 +8400,7 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 12, y: 4, z: 20}
+  m_Size: {x: 10, y: 40, z: 20}
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &2134238021
 GameObject:
