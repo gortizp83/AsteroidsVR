@@ -14,14 +14,12 @@ namespace VRStandardAssets.ShootingGallery
     // spawnning more likely when there are fewer.
     public class ShootingGalleryController : MonoBehaviour
     {
-        [SerializeField] private SessionData.GameType m_GameType;       // Whether this is a 180 or 360 shooter.
         [SerializeField] private int m_IdealTargetNumber = 5;           // How many targets aim to be on screen at once.
         [SerializeField] private float m_BaseSpawnProbability = 0.7f;   // When there are the ideal number of targets, this is the probability another will spawn.
         [SerializeField] private float m_GameLength = 60f;              // Time a game lasts in seconds.
         [SerializeField] private float m_SpawnInterval = 1f;            // How frequently a target could spawn.
         [SerializeField] private float m_EndDelay = 1.5f;               // The time the user needs to wait between the outro UI and being able to continue.
         [SerializeField] private WaveSelectionController m_WaveSelectionController;     // Used to let the user pick the wave she is playing.
-        [SerializeField] private Transform m_Camera;                    // Used to determine where targets can spawn.
         [SerializeField] private SelectionRadial m_SelectionRadial;     // Used to continue past the outro.
         [SerializeField] private Reticle m_Reticle;                     // This is turned on and off when it is required and not.
         [SerializeField] private ObjectPool m_TargetObjectPool;         // The object pool that stores all the targets.
@@ -140,7 +138,6 @@ namespace VRStandardAssets.ShootingGallery
             yield return StartCoroutine (m_UIController.HideIntroUI ());
         }
 
-
         private IEnumerator PlayWave ()
         {
             // Wait for the UI on the player's gun to fade in.
@@ -161,7 +158,6 @@ namespace VRStandardAssets.ShootingGallery
             // The game is no longer playing.
             IsPlaying = false;
         }
-
 
         private IEnumerator EndWave ()
         {
@@ -202,7 +198,6 @@ namespace VRStandardAssets.ShootingGallery
                 yield return StartCoroutine(m_UIController.HideEndOfWaveUI());
             }
         }
-
 
         private IEnumerator PlayUpdate ()
         {
@@ -272,7 +267,6 @@ namespace VRStandardAssets.ShootingGallery
             m_OutstandingTargets.Add(shootingTarget);
         }
 
-
         private Vector3 SpawnPosition ()
         {
             // Find the centre and extents of the spawn collider.
@@ -287,7 +281,6 @@ namespace VRStandardAssets.ShootingGallery
             // Return the point these random values make.
             return new Vector3(x, y, z);
         }
-
 
         private void HandleTargetRemoved(ShootingTarget target)
         {
