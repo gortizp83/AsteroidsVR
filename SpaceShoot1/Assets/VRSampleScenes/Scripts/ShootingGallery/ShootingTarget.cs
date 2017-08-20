@@ -96,6 +96,24 @@ namespace VRStandardAssets.ShootingGallery
             m_IsPaused = false;
         }
 
+        private void OnTriggerEnter(Collider other)
+        {
+            if (other.transform.tag == "Earth")
+            {
+                StartCoroutine(AnimateTargetHit());
+
+                // Turn off the visual and physical aspects.
+                m_Renderer.enabled = false;
+                m_Collider.enabled = false;
+
+                PlayTargetDestroy();
+
+                // Tell subscribers that this target is ready to be removed.
+                if (OnRemove != null)
+                    OnRemove(this);
+            }
+        }
+
         private void Update()
         {
             if (m_IsPaused)

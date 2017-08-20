@@ -91,6 +91,8 @@
     <Compile Include="Assets\Earth\Scripts\EarthScript.cs" />
     <Compile Include="Assets\Earth\Scripts\MoveScript.cs" />
     <Compile Include="Assets\Earth\Scripts\SphereScript.cs" />
+    <Compile Include="Assets\Fx Explosion Pack\Script\csLightControl.cs" />
+    <Compile Include="Assets\Fx Explosion Pack\Script\DestroyEffect.cs" />
     <Compile Include="Assets\GapstopController.cs" />
     <Compile Include="Assets\VRButton.cs" />
     <Compile Include="Assets\VRSampleScenes\Scripts\Common\GameScore.cs" />
@@ -125,6 +127,7 @@
     <Compile Include="Assets\VRSampleScenes\Scripts\ShootingGallery\ShootingGalleryScore.cs" />
     <Compile Include="Assets\VRSampleScenes\Scripts\ShootingGallery\ShootingTarget.cs" />
     <Compile Include="Assets\VRSampleScenes\Scripts\ShootingGallery\ShootingTargetBase.cs" />
+    <Compile Include="Assets\VRSampleScenes\Scripts\ShootingGallery\TargetConfiguration.cs" />
     <Compile Include="Assets\VRSampleScenes\Scripts\ShootingGallery\TargetDefinition.cs" />
     <Compile Include="Assets\VRSampleScenes\Scripts\ShootingGallery\UIController.cs" />
     <Compile Include="Assets\VRSampleScenes\Scripts\ShootingGallery\WaveConfiguration.cs" />
