@@ -21,9 +21,9 @@ public class UnityEditorDebug : MonoBehaviour
         transform.SetParent(m_UnityEditorCharacter);
 #endif
     }
-	
-	// Update is called once per frame
-	void Update () {
+
+    // Update is called once per frame
+    void Update () {
 		
 	}
 }

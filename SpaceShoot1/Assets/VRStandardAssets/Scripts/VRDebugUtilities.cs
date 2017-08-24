@@ -22,16 +22,12 @@ public class VRDebugUtilities : MonoBehaviour
     // Use this for initialization
     void Start ()
     {
-//#if UNITY_EDITOR
-//        //var parent = transform.parent;
-//        var mainCamera = transform.Find("MainCamera");
-//        mainCamera.transform.parent = this.transform;
-//#endif
-
+#if UNITY_EDITOR
         m_Camera = Camera.main;
         m_MouseLook.Init(transform, m_Camera.transform);
+#endif
     }
-    
+
     // Update is called once per frame
     void Update () {
         RotateView();
@@ -39,11 +35,15 @@ public class VRDebugUtilities : MonoBehaviour
 
     private void FixedUpdate()
     {
+ #if UNITY_EDITOR
         m_MouseLook.UpdateCursorLock();
+#endif
     }
 
     private void RotateView()
     {
+#if UNITY_EDITOR
         m_MouseLook.LookRotation(transform, m_Camera.transform);
+#endif
     }
 }
