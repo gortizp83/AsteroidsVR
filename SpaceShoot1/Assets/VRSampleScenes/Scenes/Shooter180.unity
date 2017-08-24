@@ -397,6 +397,17 @@ Prefab:
       propertyPath: m_Enabled
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 114431905216721126, guid: c2e22098ce7c8da4590cceb5113bd50e,
+        type: 2}
+      propertyPath: m_collisionEffect
+      value: 
+      objectReference: {fileID: 1912883759136446, guid: 071f071749f59534d95bf339bf526d25,
+        type: 2}
+    - target: {fileID: 114431905216721126, guid: c2e22098ce7c8da4590cceb5113bd50e,
+        type: 2}
+      propertyPath: m_earth
+      value: 
+      objectReference: {fileID: 470326381}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: c2e22098ce7c8da4590cceb5113bd50e, type: 2}
   m_IsPrefabParent: 0
