@@ -15,13 +15,13 @@ internal class GameStatics
         // Level 1
         LevelConfiguration level1 = new LevelConfiguration(levelCount++);
 
-#if UNITY_EDITOR
         // Wave Debug
-        List<TargetConfiguration> waveDebug = GenerateTargetSequence(200, TargetType.Easy, TargetSpawnPosition.Right);
-        waveDebug.AddRange(GenerateTargetSequence(2, TargetType.Easy, TargetSpawnPosition.FrontRight));
-        waveDebug.AddRange(GenerateTargetSequence(200, TargetType.Easy, TargetSpawnPosition.Right));
+        List<SequenceCofig> sequenceConfigDebug = new List<SequenceCofig>();
+        sequenceConfigDebug.Add(new SequenceCofig(5, new TargetConfiguration(TargetType.Easy, TargetSpawnPosition.Front)));
+        sequenceConfigDebug.Add(new SequenceCofig(5, new TargetConfiguration(TargetType.Easy, TargetSpawnPosition.FrontRight)));
+        sequenceConfigDebug.Add(new SequenceCofig(5, new TargetConfiguration(TargetType.Easy, TargetSpawnPosition.Right)));
+        List<TargetConfiguration> waveDebug = new List<TargetConfiguration>(GenerateRandomSequence(sequenceConfigDebug));
         level1.WaveConfig.Add(new WaveConfiguration(waveCounter++,  waveDebug));
-#endif
 
         // Wave 1
         List<TargetConfiguration> wave1 = GenerateTargetSequence(10, TargetType.Easy);
