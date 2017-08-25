@@ -77,7 +77,7 @@ public class WaveSelectionController : MonoBehaviour {
         for (int i = count - 1; i >= 0; i--)
         {
             m_buttons[i].GetComponent<VRButton>().OnDown -= VrButton_OnDown;
-            GameObject.Destroy(m_buttons[i]);
+            GameObject.Destroy(m_buttons[i], 0.5f);
         }
 
         m_buttons.Clear();
