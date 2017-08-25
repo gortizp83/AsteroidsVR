@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using VRStandardAssets.Common;
 using VRStandardAssets.Utils;
@@ -37,6 +38,10 @@ namespace VRStandardAssets.ShootingGallery
         private bool m_IgnoreHit = false;
         private bool m_IsPaused = false;
         private Vector3 m_forwardDirection = Vector3.forward;
+        private List<Transform> m_AsteroidCollection = new List<Transform>();
+        private MeshFilter m_MeshFilter;
+        private MeshCollider m_MeshCollider;
+        private Transform m_CurrentAsteroid;
 
         public TargetType Type
         {
@@ -103,8 +108,7 @@ namespace VRStandardAssets.ShootingGallery
                 StartCoroutine(AnimateTargetHit());
 
                 // Turn off the visual and physical aspects.
-                m_Renderer.enabled = false;
-                m_Collider.enabled = false;
+                SetRenderEnable(false);
 
                 PlayTargetDestroy();
 
@@ -137,13 +141,24 @@ namespace VRStandardAssets.ShootingGallery
 
         protected void Awake()
         {
+            foreach (Transform child in transform)
+            {
+                // Ensure all child are disabled upon start
+                child.GetComponent<Renderer>().enabled = false;
+                m_AsteroidCollection.Add(child);
+            }
+
             // Setup the references.
             m_CameraTransform = Camera.main.transform;
             m_Audio = GetComponent<AudioSource> ();
             m_InteractiveItem = GetComponent<VRInteractiveItem>();
             m_Renderer = GetComponent<Renderer>();
+            m_MeshFilter = GetComponent<MeshFilter>();
             m_MeshRenderer = GetComponent<MeshRenderer>();
+            m_MeshRenderer.enabled = false;
+
             m_Collider = GetComponent<Collider>();
+            m_MeshCollider = GetComponent<MeshCollider>();
             m_CurrentLifePoints = m_InitialLifePoints;
             m_MeshRenderer.material.color = m_InitialColor;
         }
@@ -156,15 +171,21 @@ namespace VRStandardAssets.ShootingGallery
 
         public override void Restart (float gameTimeRemaining)
         {
+            // Pick one of the meshes from mesh collection
+            int index = UnityEngine.Random.Range(0, m_AsteroidCollection.Count - 1);
+            m_CurrentAsteroid = m_AsteroidCollection[index];
+            m_MeshFilter = m_CurrentAsteroid.GetComponent<MeshFilter>();
+            m_MeshCollider.sharedMesh = m_CurrentAsteroid.GetComponent<MeshFilter>().mesh;
+
             // When the target is spawned turn the visual and physical aspects on.
-            m_Renderer.enabled = true;
-            m_Collider.enabled = true;
+            SetRenderEnable(true);
+
             m_CurrentLifePoints = m_InitialLifePoints;
-            m_MeshRenderer.material.color = m_InitialColor;
+            m_CurrentAsteroid.GetComponent<MeshRenderer>().material.color = m_InitialColor;
 
             // Since the target has just spawned, it's not ending yet.
             m_IsEnding = false;
-            
+
             // Play the spawn clip.
             m_Audio.clip = m_SpawnClip;
             m_Audio.Play();
@@ -174,9 +195,15 @@ namespace VRStandardAssets.ShootingGallery
 
             // Start the time out for when the game ends.
             // Note this will only come into effect if the game time remaining is less than the time out duration.
-            StartCoroutine (GameOver (gameTimeRemaining));
+            StartCoroutine(GameOver(gameTimeRemaining));
         }
-        
+
+        private void SetRenderEnable(bool enable)
+        {
+            m_CurrentAsteroid.GetComponent<Renderer>().enabled = enable;
+            //m_Renderer.enabled = enable;
+            m_Collider.enabled = enable;
+        }
 
         private IEnumerator MissTarget()
         {
@@ -188,9 +215,8 @@ namespace VRStandardAssets.ShootingGallery
             m_IsEnding = true;
 
             // Turn off the visual and physical aspects.
-            m_Renderer.enabled = false;
-            m_Collider.enabled = false;
-            
+            SetRenderEnable(false);
+
             // Play the clip of the target being missed.
             m_Audio.clip = m_MissedClip;
             m_Audio.Play();
@@ -217,8 +243,7 @@ namespace VRStandardAssets.ShootingGallery
             m_IsEnding = true;
 
             // Turn off the visual and physical aspects.
-            m_Renderer.enabled = false;
-            m_Collider.enabled = false;
+            SetRenderEnable(false);
 
             // Tell subscribers that this target is ready to be removed.
             if (OnRemove != null)
@@ -227,12 +252,12 @@ namespace VRStandardAssets.ShootingGallery
 
         public IEnumerator AnimateTargetHit()
         {
-            m_MeshRenderer.material.color = m_HitColor;
+            m_CurrentAsteroid.GetComponent<MeshRenderer>().material.color = m_HitColor;
 
             // Wait for the target to disappear naturally.
             yield return new WaitForSeconds(0.1f);
 
-            m_MeshRenderer.material.color = m_InitialColor;
+            m_CurrentAsteroid.GetComponent<MeshRenderer>().material.color = m_InitialColor;
         }
 
         public override void TargetHit(int damage)
@@ -253,8 +278,7 @@ namespace VRStandardAssets.ShootingGallery
             m_IsEnding = true;
 
             // Turn off the visual and physical aspects.
-            m_Renderer.enabled = false;
-            m_Collider.enabled = false;
+            SetRenderEnable(false);
 
             // Add to the player's score.
             SessionData.AddScore(this.GetComponent<ShootingTarget>().Type);
