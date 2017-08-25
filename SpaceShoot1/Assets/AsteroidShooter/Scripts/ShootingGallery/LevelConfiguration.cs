@@ -44,4 +44,9 @@ public class LevelConfiguration
 
         return true;
     }
+
+    public void SetInitialWave(int initialWave)
+    {
+        m_waveIdx = initialWave - 1;
+    }
 }

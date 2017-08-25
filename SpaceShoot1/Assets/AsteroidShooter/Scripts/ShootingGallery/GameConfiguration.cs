@@ -51,6 +51,11 @@ public class GameConfiguration : MonoBehaviour {
         return result;
     }
 
+    public void SetInitialWave(int initialWave)
+    {
+        GetCurrentLevel().SetInitialWave(initialWave);
+    }
+
     /// <summary>
     /// Move to the next wave or level.
     /// </summary>

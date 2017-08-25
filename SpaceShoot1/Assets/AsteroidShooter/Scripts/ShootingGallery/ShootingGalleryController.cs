@@ -121,6 +121,7 @@ namespace VRStandardAssets.ShootingGallery
 
             // Wait for the selection slider to finish filling.
             yield return StartCoroutine(m_WaveSelectionController.WaitForWaveSelection());
+            m_GameConfiguration.SetInitialWave(m_WaveSelectionController.SelectedWave);
         }
 
         private IEnumerator StartWave ()
