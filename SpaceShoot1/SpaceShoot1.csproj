@@ -115,6 +115,7 @@
     <Compile Include="Assets\AsteroidShooter\Scripts\Menu\MenuSelectorMover.cs" />
     <Compile Include="Assets\AsteroidShooter\Scripts\ShootingGallery\GameConfiguration.cs" />
     <Compile Include="Assets\AsteroidShooter\Scripts\ShootingGallery\GameStatics.cs" />
+    <Compile Include="Assets\AsteroidShooter\Scripts\ShootingGallery\GapstopController.cs" />
     <Compile Include="Assets\AsteroidShooter\Scripts\ShootingGallery\LevelConfiguration.cs" />
     <Compile Include="Assets\AsteroidShooter\Scripts\ShootingGallery\MultiTarget.cs" />
     <Compile Include="Assets\AsteroidShooter\Scripts\ShootingGallery\ScoreUI.cs" />
@@ -126,8 +127,10 @@
     <Compile Include="Assets\AsteroidShooter\Scripts\ShootingGallery\TargetConfiguration.cs" />
     <Compile Include="Assets\AsteroidShooter\Scripts\ShootingGallery\TargetDefinition.cs" />
     <Compile Include="Assets\AsteroidShooter\Scripts\ShootingGallery\UIController.cs" />
+    <Compile Include="Assets\AsteroidShooter\Scripts\ShootingGallery\VRButton.cs" />
     <Compile Include="Assets\AsteroidShooter\Scripts\ShootingGallery\WaveConfiguration.cs" />
     <Compile Include="Assets\AsteroidShooter\Scripts\ShootingGallery\WaveResult.cs" />
+    <Compile Include="Assets\AsteroidShooter\Scripts\ShootingGallery\WaveSelectionController.cs" />
     <Compile Include="Assets\AsteroidShooter\Scripts\Utils\BigFireCircularSlider.cs" />
     <Compile Include="Assets\AsteroidShooter\Scripts\Utils\BigFireSlider.cs" />
     <Compile Include="Assets\AsteroidShooter\Scripts\Utils\csLightControl.cs" />
@@ -145,8 +148,6 @@
     <Compile Include="Assets\AsteroidShooter\Scripts\Utils\UnityEditorDebug.cs" />
     <Compile Include="Assets\AsteroidShooter\Scripts\Utils\VRCameraFade.cs" />
     <Compile Include="Assets\AsteroidShooter\Scripts\Utils\VRCameraUI.cs" />
-    <Compile Include="Assets\GapstopController.cs" />
-    <Compile Include="Assets\VRButton.cs" />
     <Compile Include="Assets\VRStandardAssets\Scripts\VRDebugUtilities.cs" />
     <Compile Include="Assets\VRStandardAssets\Scripts\VRDeviceManager.cs" />
     <Compile Include="Assets\VRStandardAssets\Scripts\VREyeRaycaster.cs" />
@@ -154,7 +155,6 @@
     <Compile Include="Assets\VRStandardAssets\Scripts\VRInput.cs" />
     <Compile Include="Assets\VRStandardAssets\Scripts\VRInteractiveItem.cs" />
     <Compile Include="Assets\VRStandardAssets\Scripts\VRTrackingReset.cs" />
-    <Compile Include="Assets\WaveSelectionController.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\AsteroidShooter\Fonts\LICENSE.txt" />
