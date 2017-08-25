@@ -18,8 +18,8 @@ internal class GameStatics
         // Wave Debug
         List<SequenceCofig> sequenceConfigDebug = new List<SequenceCofig>();
         sequenceConfigDebug.Add(new SequenceCofig(5, new TargetConfiguration(TargetType.Easy, TargetSpawnPosition.Front)));
-        sequenceConfigDebug.Add(new SequenceCofig(5, new TargetConfiguration(TargetType.Easy, TargetSpawnPosition.FrontRight)));
-        sequenceConfigDebug.Add(new SequenceCofig(5, new TargetConfiguration(TargetType.Easy, TargetSpawnPosition.Right)));
+        //sequenceConfigDebug.Add(new SequenceCofig(5, new TargetConfiguration(TargetType.Easy, TargetSpawnPosition.FrontRight)));
+        //sequenceConfigDebug.Add(new SequenceCofig(5, new TargetConfiguration(TargetType.Easy, TargetSpawnPosition.Right)));
         List<TargetConfiguration> waveDebug = new List<TargetConfiguration>(GenerateRandomSequence(sequenceConfigDebug));
         level1.WaveConfig.Add(new WaveConfiguration(waveCounter++,  waveDebug));
 

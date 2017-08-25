@@ -28,9 +28,8 @@ public class WaveSelectionController : MonoBehaviour {
     {
         m_pressedButton = null;
 
-        for (int i = 0; i < SessionData.Wave; i++)
+        for (int wave = SessionData.Wave; wave > 0; wave--)
         {
-            int wave = i + 1;
             var newButton = Instantiate(m_VRButonPrefab);
             var vrButton = newButton.GetComponent<VRButton>();
             vrButton.VRInput = m_VRInput;
@@ -44,7 +43,8 @@ public class WaveSelectionController : MonoBehaviour {
             txt.text = wave.ToString();
             var rectTransform = newButton.transform as RectTransform;
             var width = rectTransform.rect.width;
-            rectTransform.localPosition = new Vector3(i * width, 0, 0);
+            // position the buttons in reverse order, i.e. put the last one closer to the user's view
+            rectTransform.localPosition = new Vector3(m_buttons.Count * width, 0, 0);
             rectTransform.localScale = Vector3.one;
 
             m_buttons.Add(newButton);
