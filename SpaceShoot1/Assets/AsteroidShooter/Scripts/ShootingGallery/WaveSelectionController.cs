@@ -28,7 +28,7 @@ public class WaveSelectionController : MonoBehaviour {
     {
         m_pressedButton = null;
 
-        for (int wave = SessionData.Wave; wave > 0; wave--)
+        for (int wave = SessionData.WaveCount; wave > 0; wave--)
         {
             var newButton = Instantiate(m_VRButonPrefab);
             var vrButton = newButton.GetComponent<VRButton>();
@@ -73,8 +73,7 @@ public class WaveSelectionController : MonoBehaviour {
         m_pressedButton = null;
 
         // clear all buttons, we'll recreate them again when showing the menu
-        int count = m_buttons.Count;
-        for (int i = count - 1; i >= 0; i--)
+        for (int i = m_buttons.Count - 1; i >= 0; i--)
         {
             m_buttons[i].GetComponent<VRButton>().OnDown -= VrButton_OnDown;
             GameObject.Destroy(m_buttons[i], 0.5f);

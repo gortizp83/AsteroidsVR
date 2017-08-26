@@ -99,7 +99,7 @@ namespace VRStandardAssets.ShootingGallery
             m_TargetSequence.MoveNext();
 
             SessionData.Level = currentLevel.LevelNumber;
-            SessionData.Wave = currentWave.WaveNumber;
+            SessionData.WaveCount = currentWave.WaveNumber;
             SessionData.MinScoreToPassWave = currentWave.MinScoreToPass;
         }
 

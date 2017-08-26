@@ -29,7 +29,7 @@ namespace VRStandardAssets.Common
 
         public static GameScore Score { get { return s_Score; } }
 
-        public static int Wave
+        public static int WaveCount
         {
             get
             {

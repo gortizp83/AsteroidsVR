@@ -15,14 +15,6 @@ internal class GameStatics
         // Level 1
         LevelConfiguration level1 = new LevelConfiguration(levelCount++);
 
-        // Wave Debug
-        List<SequenceCofig> sequenceConfigDebug = new List<SequenceCofig>();
-        sequenceConfigDebug.Add(new SequenceCofig(5, new TargetConfiguration(TargetType.Easy, TargetSpawnPosition.Front)));
-        //sequenceConfigDebug.Add(new SequenceCofig(5, new TargetConfiguration(TargetType.Easy, TargetSpawnPosition.FrontRight)));
-        //sequenceConfigDebug.Add(new SequenceCofig(5, new TargetConfiguration(TargetType.Easy, TargetSpawnPosition.Right)));
-        List<TargetConfiguration> waveDebug = new List<TargetConfiguration>(GenerateRandomSequence(sequenceConfigDebug));
-        level1.WaveConfig.Add(new WaveConfiguration(waveCounter++,  waveDebug));
-
         // Wave 1
         List<TargetConfiguration> wave1 = GenerateTargetSequence(10, TargetType.Easy);
         GameScore gameScore1 = new GameScore();
@@ -48,6 +40,22 @@ internal class GameStatics
         gameScore3.SetScore(TargetType.Medium, 10);
         gameScore3.SetScore(TargetType.Hard, 5);
         level1.WaveConfig.Add(new WaveConfiguration(waveCounter++, gameScore3, wave3));
+
+        // Wave 4
+        List<SequenceCofig> sequenceConfig4 = new List<SequenceCofig>();
+        sequenceConfig4.Add(new SequenceCofig(5, new TargetConfiguration(TargetType.Easy, TargetSpawnPosition.FrontRight)));
+        sequenceConfig4.Add(new SequenceCofig(5, new TargetConfiguration(TargetType.Easy, TargetSpawnPosition.Right)));
+        List<TargetConfiguration> wave4 = new List<TargetConfiguration>(GenerateRandomSequence(sequenceConfig4));
+        level1.WaveConfig.Add(new WaveConfiguration(waveCounter++, wave4));
+
+        // Wave 5
+        List<SequenceCofig> sequenceConfig5 = new List<SequenceCofig>();
+        sequenceConfig4.Add(new SequenceCofig(2, new TargetConfiguration(TargetType.Easy, TargetSpawnPosition.Right)));
+        sequenceConfig5.Add(new SequenceCofig(3, new TargetConfiguration(TargetType.Medium, TargetSpawnPosition.FrontRight)));
+        sequenceConfig5.Add(new SequenceCofig(3, new TargetConfiguration(TargetType.Medium, TargetSpawnPosition.Right)));
+        sequenceConfig5.Add(new SequenceCofig(2, new TargetConfiguration(TargetType.Hard, TargetSpawnPosition.FrontRight)));
+        List<TargetConfiguration> wave5 = new List<TargetConfiguration>(GenerateRandomSequence(sequenceConfig5));
+        level1.WaveConfig.Add(new WaveConfiguration(waveCounter++, wave5));
 
         levels.Add(level1);
         return levels;

@@ -101,10 +101,10 @@ public class VRButton : MonoBehaviour {
     {
 #if UNITY_EDITOR
         m_InteractiveItem.OnClick += HandleDown;
-#else
+#endif
+
         VRInput.OnDown -= HandleDown;
         VRInput.OnUp -= HandleUp;
-#endif
 
         m_InteractiveItem.OnOver -= HandleOver;
         m_InteractiveItem.OnOut -= HandleOut;
