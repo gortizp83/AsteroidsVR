@@ -198,6 +198,14 @@ namespace VRStandardAssets.ShootingGallery
             StartCoroutine(GameOver(gameTimeRemaining));
         }
 
+        public void RemoveFromView()
+        {
+            SetRenderEnable(false);
+
+            // Tell subscribers that this target is ready to be removed.
+            if (OnRemove != null)
+                OnRemove(this);
+        }
         private void SetRenderEnable(bool enable)
         {
             m_CurrentAsteroid.GetComponent<Renderer>().enabled = enable;

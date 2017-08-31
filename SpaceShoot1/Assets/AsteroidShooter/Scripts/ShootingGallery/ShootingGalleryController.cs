@@ -36,8 +36,18 @@ namespace VRStandardAssets.ShootingGallery
         private List<TargetConfiguration>.Enumerator m_TargetSequence;
 
         private List<ShootingTarget> m_OutstandingTargets = new List<ShootingTarget>();
+        private Coroutine m_WaitForWaveSalection = null;
 
-        public bool IsPlaying { get; private set; }                     // Whether or not the game is currently playing.
+        private GameStateMachine m_GameStateMachine = new GameStateMachine();
+
+        // Whether or not the game is currently playing.
+        public bool IsPlaying
+        {
+            get
+            {
+                return m_GameStateMachine.CurrentState == GameStateMachine.GameState.Playing;
+            }
+        }
 
         private void Awake()
         {
@@ -47,22 +57,38 @@ namespace VRStandardAssets.ShootingGallery
         private void OnEnable()
         {
             m_VRInput.OnCancel += HandleCancel;
+            m_GameStateMachine.OnGameStateChanged += HandleGameStateChanged;
         }
 
         private void OnDisable()
         {
             m_VRInput.OnCancel -= HandleCancel;
+            m_GameStateMachine.OnGameStateChanged -= HandleGameStateChanged;
+        }
+
+        private void HandleGameStateChanged(object sender, GameStateMachine.GameStateChangedEventArgs e)
+        {
+            switch (e.CurrentState)
+            {
+                case GameStateMachine.GameState.MainMenu:
+                    StartCoroutine(GameMainMenu());
+                    break;
+                case GameStateMachine.GameState.Playing:
+                    StartCoroutine(PlayGame());
+                    break;
+                case GameStateMachine.GameState.QuitGame:
+                    Application.Quit();
+                    break;
+                default:
+                    Debug.LogWarningFormat("Not handled state: {0}", e.CurrentState);
+                    break;
+            }
         }
 
         private void HandleCancel()
         {
-            StopAllCoroutines();
-            foreach(var target in m_OutstandingTargets)
-            {
-                target.Pause();
-            }
+            var newState = m_GameStateMachine.SetCommand(GameStateMachine.Command.CancelPressed);
 
-            StartCoroutine(InitializeGame());
         }
 
         private void Start()
@@ -75,35 +101,35 @@ namespace VRStandardAssets.ShootingGallery
             // So if there are no targets, the probability of one spawning will be 1, then 0.94, then 0.88, etc.
             m_ProbabilityDelta = (1f - m_BaseSpawnProbability) / m_IdealTargetNumber;
 
-            StartCoroutine(InitializeGame());
+            m_GameStateMachine.SetCommand(GameStateMachine.Command.Begin);
         }
 
-        private IEnumerator InitializeGame()
+        private IEnumerator PauseGame()
         {
-            yield return StartCoroutine(StartGame());
+            m_Reticle.Hide();
+            m_SelectionRadial.Hide();
 
+            for (int i = m_OutstandingTargets.Count - 1; i >= 0; i--)
+            {
+                m_OutstandingTargets[i].Pause();
+            }
+
+            //StartCoroutine(InitializeGame());
+            return null;
+        }
+
+        private IEnumerator PlayGame()
+        {
             // Continue looping through all the phases.
             while (true)
             {
-                yield return StartCoroutine(StartWave());
-                yield return StartCoroutine(PlayWave());
-                yield return StartCoroutine(EndWave());
+                yield return StartCoroutine(GameStartWave());
+                yield return StartCoroutine(GamePlayWave());
+                yield return StartCoroutine(GameEndWave());
             }
         }
 
-        private void UpdateLevelInfo()
-        {
-            var currentLevel = m_GameConfiguration.GetCurrentLevel();
-            var currentWave = currentLevel.GetCurrentWave();
-            m_TargetSequence = currentWave.TargetSequence.GetEnumerator();
-            m_TargetSequence.MoveNext();
-
-            SessionData.Level = currentLevel.LevelNumber;
-            SessionData.WaveCount = currentWave.WaveNumber;
-            SessionData.MinScoreToPassWave = currentWave.MinScoreToPass;
-        }
-
-        private IEnumerator StartGame()
+        private IEnumerator GameMainMenu()
         {
             // Show VR buttons
             m_WaveSelectionController.ShowWaveButtons();
@@ -119,12 +145,16 @@ namespace VRStandardAssets.ShootingGallery
             m_Reticle.Show();
             m_SelectionRadial.Hide();
 
-            // Wait for the selection slider to finish filling.
-            yield return StartCoroutine(m_WaveSelectionController.WaitForWaveSelection());
+            // Wait for the user to select a wave
+            m_WaitForWaveSalection = StartCoroutine(m_WaveSelectionController.WaitForWaveSelection());
+            yield return m_WaitForWaveSalection;
+            m_WaitForWaveSalection = null;
+
             m_GameConfiguration.SetInitialWave(m_WaveSelectionController.SelectedWave);
+            m_GameStateMachine.SetCommand(GameStateMachine.Command.WaveSelected);
         }
 
-        private IEnumerator StartWave ()
+        private IEnumerator GameStartWave ()
         {
             foreach (var target in m_OutstandingTargets)
             {
@@ -141,13 +171,10 @@ namespace VRStandardAssets.ShootingGallery
             yield return StartCoroutine (m_UIController.HideIntroUI ());
         }
 
-        private IEnumerator PlayWave ()
+        private IEnumerator GamePlayWave ()
         {
             // Wait for the UI on the player's gun to fade in.
             yield return StartCoroutine(m_UIController.ShowPlayerUI());
-
-            // The game is now playing.
-            IsPlaying = true;
 
             // Make sure the reticle is being shown.
             m_Reticle.Show ();
@@ -157,12 +184,9 @@ namespace VRStandardAssets.ShootingGallery
 
             // Wait for the play updates to finish.
             yield return StartCoroutine (PlayUpdate ());
-
-            // The game is no longer playing.
-            IsPlaying = false;
         }
 
-        private IEnumerator EndWave ()
+        private IEnumerator GameEndWave ()
         {
             // TODO: send stats to ensure the player passed or failed the wave
             PhaseResult result = m_GameConfiguration.FinishPhase(SessionData.Score);
@@ -200,6 +224,18 @@ namespace VRStandardAssets.ShootingGallery
                 yield return new WaitForSeconds(0.5f);
                 yield return StartCoroutine(m_UIController.HideEndOfWaveUI());
             }
+        }
+
+        private void UpdateLevelInfo()
+        {
+            var currentLevel = m_GameConfiguration.GetCurrentLevel();
+            var currentWave = currentLevel.GetCurrentWave();
+            m_TargetSequence = currentWave.TargetSequence.GetEnumerator();
+            m_TargetSequence.MoveNext();
+
+            SessionData.Level = currentLevel.LevelNumber;
+            SessionData.WaveCount = currentWave.WaveNumber;
+            SessionData.MinScoreToPassWave = currentWave.MinScoreToPass;
         }
 
         private IEnumerator PlayUpdate ()
