@@ -169,7 +169,7 @@ namespace VRStandardAssets.ShootingGallery
             OnRemove = null;
         }
 
-        public override void Restart (float gameTimeRemaining)
+        public override void Restart ()
         {
             // Pick one of the meshes from mesh collection
             int index = UnityEngine.Random.Range(0, m_AsteroidCollection.Count - 1);
@@ -192,10 +192,6 @@ namespace VRStandardAssets.ShootingGallery
 
             // Make sure the target is facing the camera.
             transform.LookAt(m_CameraTransform);
-
-            // Start the time out for when the game ends.
-            // Note this will only come into effect if the game time remaining is less than the time out duration.
-            StartCoroutine(GameOver(gameTimeRemaining));
         }
 
         public void RemoveFromView()
@@ -235,27 +231,6 @@ namespace VRStandardAssets.ShootingGallery
             // Tell subscribers that this target is ready to be removed.
             if (OnRemove != null)
                 OnRemove(this);
-        }
-
-
-        private IEnumerator GameOver (float gameTimeRemaining)
-        {
-            // Wait for the game to end.
-            yield return new WaitForSeconds (gameTimeRemaining);
-
-            // If by this point it's already ending, do nothing else.
-            if(m_IsEnding)
-                yield break;
-
-            // Otherwise this is ending the target's lifetime.
-            m_IsEnding = true;
-
-            // Turn off the visual and physical aspects.
-            SetRenderEnable(false);
-
-            // Tell subscribers that this target is ready to be removed.
-            if (OnRemove != null)
-                OnRemove (this);
         }
 
         public IEnumerator AnimateTargetHit()

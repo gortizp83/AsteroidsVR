@@ -16,7 +16,6 @@ namespace VRStandardAssets.ShootingGallery
     {
         [SerializeField] private int m_IdealTargetNumber = 5;           // How many targets aim to be on screen at once.
         [SerializeField] private float m_BaseSpawnProbability = 0.7f;   // When there are the ideal number of targets, this is the probability another will spawn.
-        [SerializeField] private float m_GameLength = 60f;              // Time a game lasts in seconds.
         [SerializeField] private float m_SpawnInterval = 1f;            // How frequently a target could spawn.
         [SerializeField] private float m_EndDelay = 1.5f;               // The time the user needs to wait between the outro UI and being able to continue.
         [SerializeField] private WaveSelectionController m_WaveSelectionController;     // Used to let the user pick the wave she is playing.
@@ -243,52 +242,45 @@ namespace VRStandardAssets.ShootingGallery
             // When the updates start, the probability of a target spawning is 100%.
             m_SpawnProbability = 1f;
 
-            // The time remaining is the full length of the game length.
-            float gameTimer = m_GameLength;
-
             // The amount of time before the next spawn is the full interval.
             float spawnTimer = m_SpawnInterval;
-
+            bool hasNextTarget = true;
             // While there is still time remaining...
-            while (gameTimer > 0f)
+            while (m_OutstandingTargets.Count > 0 || hasNextTarget)
             {
-                // ... check if the timer for spawning has reached zero.
-                if (spawnTimer <= 0f)
+                // Only attemp to spawn another target if we do have a next target.
+                // Otherwise just wait for all the targets to get destroyed or disappear from the user's view.
+                if (hasNextTarget)
                 {
-                    // If it's time to spawn, check if a spawn should happen based on the probability.
-                    if (UnityEngine.Random.value < m_SpawnProbability)
+                    // ... check if the timer for spawning has reached zero.
+                    if (spawnTimer <= 0f)
                     {
-                        // If a spawn should happen, restart the timer for spawning.
-                        spawnTimer = m_SpawnInterval;
-
-                        // Decrease the probability of a spawn next time because there are now more targets.
-                        m_SpawnProbability -= m_ProbabilityDelta;
-
-                        // Spawn a target.
-                        Spawn (gameTimer, m_TargetSequence.Current);
-
-                        if (!m_TargetSequence.MoveNext())
+                        // If it's time to spawn, check if a spawn should happen based on the probability.
+                        if (UnityEngine.Random.value < m_SpawnProbability)
                         {
-                            while(m_OutstandingTargets.Count > 0)
-                            {
-                                // Wait until all the targets are either destroyed or out of the players view
-                                yield return null;
-                            }
-                            break;
+                            // If a spawn should happen, restart the timer for spawning.
+                            spawnTimer = m_SpawnInterval;
+
+                            // Decrease the probability of a spawn next time because there are now more targets.
+                            m_SpawnProbability -= m_ProbabilityDelta;
+
+                            // Spawn a target.
+                            Spawn(m_TargetSequence.Current);
+
+                            hasNextTarget = m_TargetSequence.MoveNext();
                         }
                     }
+
+                    // Decrease the timers by the time that was waited.
+                    spawnTimer -= Time.deltaTime;
                 }
 
                 // Wait for the next frame.
                 yield return null;
-
-                // Decrease the timers by the time that was waited.
-                gameTimer -= Time.deltaTime;
-                spawnTimer -= Time.deltaTime;
             }
         }
         
-        private void Spawn (float timeRemaining, TargetConfiguration targetConfig)
+        private void Spawn (TargetConfiguration targetConfig)
         {
             // Get a reference to a target instance from the object pool.
             GameObject target = m_TargetObjectPool.GetGameObjectFromPool (targetConfig.Type);
@@ -298,7 +290,7 @@ namespace VRStandardAssets.ShootingGallery
 
             // Find a reference to the ShootingTarget script on the target gameobject and call it's Restart function.
             ShootingTarget shootingTarget = target.GetComponent<ShootingTarget>();
-            shootingTarget.Restart(timeRemaining);
+            shootingTarget.Restart();
 
             // Subscribe to the OnRemove event.
             shootingTarget.OnRemove += HandleTargetRemoved;
