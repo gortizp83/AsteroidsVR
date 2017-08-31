@@ -73,7 +73,17 @@ namespace VRStandardAssets.ShootingGallery
                     StartCoroutine(GameMainMenu());
                     break;
                 case GameStateMachine.GameState.Playing:
-                    StartCoroutine(PlayGame());
+                    if (e.OldState == GameStateMachine.GameState.Paused)
+                    {
+                        ResumeGame();
+                    }
+                    else
+                    {
+                        StartCoroutine(PlayGame());
+                    }
+                    break;
+                case GameStateMachine.GameState.Paused:
+                    StartCoroutine(PauseGame());
                     break;
                 case GameStateMachine.GameState.QuitGame:
                     Application.Quit();
@@ -106,15 +116,42 @@ namespace VRStandardAssets.ShootingGallery
         private IEnumerator PauseGame()
         {
             m_Reticle.Hide();
-            m_SelectionRadial.Hide();
+            m_SelectionRadial.Show();
 
             for (int i = m_OutstandingTargets.Count - 1; i >= 0; i--)
             {
                 m_OutstandingTargets[i].Pause();
             }
 
-            //StartCoroutine(InitializeGame());
-            return null;
+            // In order, wait for the outro UI to fade in then wait for an additional delay.
+            yield return StartCoroutine(m_UIController.ShowGamePausedUI());
+            yield return new WaitForSeconds(m_EndDelay);
+
+            // Turn on the tap warnings.
+            m_InputWarnings.TurnOnDoubleTapWarnings();
+            m_InputWarnings.TurnOnSingleTapWarnings();
+
+            // Wait for the radial to fill (this will show and hide the radial automatically).
+            yield return StartCoroutine(m_SelectionRadial.WaitForSelectionRadialToFill());
+
+            m_GameStateMachine.SetCommand(GameStateMachine.Command.Resume);
+
+            // The radial is now filled so stop the warnings.
+            m_InputWarnings.TurnOffDoubleTapWarnings();
+            m_InputWarnings.TurnOffSingleTapWarnings();
+            // Wait for the outro UI to fade out.
+            yield return StartCoroutine(m_UIController.HideGamePausedUI());
+        }
+
+        private void ResumeGame()
+        {
+            m_Reticle.Show();
+            m_SelectionRadial.Hide();
+
+            for (int i = m_OutstandingTargets.Count - 1; i >= 0; i--)
+            {
+                m_OutstandingTargets[i].Resume();
+            }
         }
 
         private IEnumerator PlayGame()
@@ -130,6 +167,13 @@ namespace VRStandardAssets.ShootingGallery
 
         private IEnumerator GameMainMenu()
         {
+            // Ensure the state of the game is clean when showing the main menu as we could come from a pause state
+            yield return StartCoroutine(m_UIController.HideGamePausedUI());
+            for (int i = m_OutstandingTargets.Count - 1; i >= 0; i--)
+            {
+                m_OutstandingTargets[i].RemoveFromView();
+            }
+
             // Show VR buttons
             m_WaveSelectionController.ShowWaveButtons();
 
@@ -250,7 +294,7 @@ namespace VRStandardAssets.ShootingGallery
             {
                 // Only attemp to spawn another target if we do have a next target.
                 // Otherwise just wait for all the targets to get destroyed or disappear from the user's view.
-                if (hasNextTarget)
+                if (hasNextTarget && m_GameStateMachine.CurrentState == GameStateMachine.GameState.Playing)
                 {
                     // ... check if the timer for spawning has reached zero.
                     if (spawnTimer <= 0f)
