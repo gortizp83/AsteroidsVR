@@ -171,6 +171,8 @@ namespace VRStandardAssets.ShootingGallery
 
         public override void Restart ()
         {
+            m_IsPaused = false;
+
             // Pick one of the meshes from mesh collection
             int index = UnityEngine.Random.Range(0, m_AsteroidCollection.Count - 1);
             m_CurrentAsteroid = m_AsteroidCollection[index];
