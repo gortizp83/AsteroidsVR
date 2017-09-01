@@ -70,12 +70,13 @@ namespace VRStandardAssets.ShootingGallery
             switch (e.CurrentState)
             {
                 case GameStateMachine.GameState.MainMenu:
+                    StopAllCoroutines();
                     StartCoroutine(GameMainMenu());
                     break;
                 case GameStateMachine.GameState.Playing:
                     if (e.OldState == GameStateMachine.GameState.Paused)
                     {
-                        ResumeGame();
+                        StartCoroutine(ResumeGame());
                     }
                     else
                     {
@@ -123,6 +124,8 @@ namespace VRStandardAssets.ShootingGallery
                 m_OutstandingTargets[i].Pause();
             }
 
+            yield return StartCoroutine(m_UIController.HidePlayerUI());
+
             // In order, wait for the outro UI to fade in then wait for an additional delay.
             yield return StartCoroutine(m_UIController.ShowGamePausedUI());
             yield return new WaitForSeconds(m_EndDelay);
@@ -143,8 +146,10 @@ namespace VRStandardAssets.ShootingGallery
             yield return StartCoroutine(m_UIController.HideGamePausedUI());
         }
 
-        private void ResumeGame()
+        private IEnumerator ResumeGame()
         {
+            yield return StartCoroutine(m_UIController.ShowPlayerUI());
+
             m_Reticle.Show();
             m_SelectionRadial.Hide();
 
@@ -167,12 +172,23 @@ namespace VRStandardAssets.ShootingGallery
 
         private IEnumerator GameMainMenu()
         {
-            // Ensure the state of the game is clean when showing the main menu as we could come from a pause state
-            yield return StartCoroutine(m_UIController.HideGamePausedUI());
+            // Show the reticle (since there is now a selection slider) and hide the radial.
+            m_Reticle.Show();
+            m_SelectionRadial.Hide();
+
             for (int i = m_OutstandingTargets.Count - 1; i >= 0; i--)
             {
                 m_OutstandingTargets[i].RemoveFromView();
             }
+
+            // Ensure the state of the game is clean when showing the main menu as we could come from a pause state
+            StopCoroutine("GameStartWave");
+            StopCoroutine("GamePlayWave");
+            StopCoroutine("GameEndWave");
+            StopCoroutine("PlayUpdate");
+            yield return StartCoroutine(m_UIController.HideGamePausedUI());
+            yield return StartCoroutine(m_UIController.HidePlayerUI());
+
 
             // Show VR buttons
             m_WaveSelectionController.ShowWaveButtons();
@@ -183,10 +199,6 @@ namespace VRStandardAssets.ShootingGallery
             // Turn on the tap warnings for the selection slider.
             m_InputWarnings.TurnOnDoubleTapWarnings();
             m_InputWarnings.TurnOnSingleTapWarnings();
-
-            // Show the reticle (since there is now a selection slider) and hide the radial.
-            m_Reticle.Show();
-            m_SelectionRadial.Hide();
 
             // Wait for the user to select a wave
             m_WaitForWaveSalection = StartCoroutine(m_WaveSelectionController.WaitForWaveSelection());
