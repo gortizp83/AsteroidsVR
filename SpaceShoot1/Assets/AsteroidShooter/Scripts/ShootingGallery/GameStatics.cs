@@ -43,17 +43,18 @@ internal class GameStatics
 
         // Wave 4
         List<SequenceCofig> sequenceConfig4 = new List<SequenceCofig>();
-        sequenceConfig4.Add(new SequenceCofig(5, new TargetConfiguration(TargetType.Easy, TargetSpawnPosition.FrontRight)));
-        sequenceConfig4.Add(new SequenceCofig(5, new TargetConfiguration(TargetType.Easy, TargetSpawnPosition.Right)));
+        sequenceConfig4.Add(new SequenceCofig(5, new TargetConfiguration(TargetType.Easy, SpawnPosition.FrontRight)));
+        sequenceConfig4.Add(new SequenceCofig(5, new TargetConfiguration(TargetType.Easy, SpawnPosition.Right)));
         List<TargetConfiguration> wave4 = new List<TargetConfiguration>(GenerateRandomSequence(sequenceConfig4));
         level1.WaveConfig.Add(new WaveConfiguration(waveCounter++, wave4));
 
+        const float c_sideSpeeSlow = 7.5f;
         // Wave 5
         List<SequenceCofig> sequenceConfig5 = new List<SequenceCofig>();
-        sequenceConfig4.Add(new SequenceCofig(2, new TargetConfiguration(TargetType.Easy, TargetSpawnPosition.Right)));
-        sequenceConfig5.Add(new SequenceCofig(3, new TargetConfiguration(TargetType.Medium, TargetSpawnPosition.FrontRight)));
-        sequenceConfig5.Add(new SequenceCofig(3, new TargetConfiguration(TargetType.Medium, TargetSpawnPosition.Right)));
-        sequenceConfig5.Add(new SequenceCofig(2, new TargetConfiguration(TargetType.Hard, TargetSpawnPosition.FrontRight)));
+        sequenceConfig4.Add(new SequenceCofig(2, new TargetConfiguration(TargetType.Easy, SpawnPosition.Right, c_sideSpeeSlow)));
+        sequenceConfig5.Add(new SequenceCofig(3, new TargetConfiguration(TargetType.Medium, SpawnPosition.FrontRight, c_sideSpeeSlow)));
+        sequenceConfig5.Add(new SequenceCofig(3, new TargetConfiguration(TargetType.Medium, SpawnPosition.Right, c_sideSpeeSlow)));
+        sequenceConfig5.Add(new SequenceCofig(2, new TargetConfiguration(TargetType.Hard, SpawnPosition.FrontRight, c_sideSpeeSlow)));
         List<TargetConfiguration> wave5 = new List<TargetConfiguration>(GenerateRandomSequence(sequenceConfig5));
         level1.WaveConfig.Add(new WaveConfiguration(waveCounter++, wave5));
 
@@ -61,7 +62,7 @@ internal class GameStatics
         return levels;
     }
 
-    private static List<TargetConfiguration> GenerateTargetSequence(int targetCount, TargetType targetType, TargetSpawnPosition spawnPosition = TargetSpawnPosition.Front)
+    private static List<TargetConfiguration> GenerateTargetSequence(int targetCount, TargetType targetType, SpawnPosition spawnPosition = SpawnPosition.Front)
     {
         List<TargetConfiguration> targets = new List<TargetConfiguration>();
         

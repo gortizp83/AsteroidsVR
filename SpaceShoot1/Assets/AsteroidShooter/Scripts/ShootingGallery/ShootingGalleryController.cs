@@ -349,27 +349,27 @@ namespace VRStandardAssets.ShootingGallery
             // Find a reference to the ShootingTarget script on the target gameobject and call it's Restart function.
             ShootingTarget shootingTarget = target.GetComponent<ShootingTarget>();
             shootingTarget.Restart();
-
+            shootingTarget.OverrideTargetSpeed = targetConfig.OverrideTargetSpeed;
             // Subscribe to the OnRemove event.
             shootingTarget.OnRemove += HandleTargetRemoved;
 
             m_OutstandingTargets.Add(shootingTarget);
         }
 
-        private void SetTargetSpawnProperties (TargetSpawnPosition spawnPosition, ref GameObject target)
+        private void SetTargetSpawnProperties (SpawnPosition spawnPosition, ref GameObject target)
         {
             BoxCollider spawnCollider;
             ShootingTarget shootingTarget = target.GetComponent<ShootingTarget>();
 
             switch (spawnPosition)
             {
-                case TargetSpawnPosition.Front:
+                case SpawnPosition.Front:
                     spawnCollider = m_frontSpawnCollider;
                     break;
-                case TargetSpawnPosition.FrontRight:
+                case SpawnPosition.FrontRight:
                     spawnCollider = m_frontRightSpawnCollider;
                     break;
-                case TargetSpawnPosition.Right:
+                case SpawnPosition.Right:
                     spawnCollider = m_rightSpawnCollider;
                     break;
                 default:

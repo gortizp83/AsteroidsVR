@@ -15,7 +15,7 @@ namespace VRStandardAssets.ShootingGallery
         HardDouble,
     }
 
-    public enum TargetSpawnPosition
+    public enum SpawnPosition
     {
         Front,
         FrontRight,
@@ -24,25 +24,21 @@ namespace VRStandardAssets.ShootingGallery
 
     public class TargetConfiguration
     {
-        private TargetType m_type;
-        private TargetSpawnPosition m_spawnPosition;
-
-        public TargetConfiguration(TargetType type, TargetSpawnPosition spawnPosition = TargetSpawnPosition.Front)
+        public TargetConfiguration(
+            TargetType type,
+            SpawnPosition spawnPosition = SpawnPosition.Front,
+            float? overrideTargetSpeed = null)
         {
-            m_type = type;
-            m_spawnPosition = spawnPosition;
+            Type = type;
+            SpawnPosition = spawnPosition;
+
+            OverrideTargetSpeed = overrideTargetSpeed;
         }
 
-        public TargetType Type
-        {
-            get { return m_type; }
-            set { m_type = value; }
-        }
+        public TargetType Type { get; set; }
 
-        public TargetSpawnPosition SpawnPosition
-        {
-            get { return m_spawnPosition; }
-            set { m_spawnPosition = value; }
-        }
+        public SpawnPosition SpawnPosition { get; set; }
+
+        public float? OverrideTargetSpeed { get; private set; }
     }
 }

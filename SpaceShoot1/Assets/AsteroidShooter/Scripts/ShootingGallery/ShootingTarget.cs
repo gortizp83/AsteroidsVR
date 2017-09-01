@@ -20,7 +20,7 @@ namespace VRStandardAssets.ShootingGallery
         [SerializeField] private AudioClip m_DestroyClip;               // The audio clip to play when the target shatters.
         [SerializeField] private AudioClip m_SpawnClip;                 // The audio clip that plays when the target appears.
         [SerializeField] private AudioClip m_MissedClip;                // The audio clip that plays when the target disappears without being hit.
-        [SerializeField] private float m_TargetSpeed = 5;
+        [SerializeField] private float m_DefaultTargetSpeed = 5;
         [SerializeField] private float m_SpawnScale = 0.5f;
         [SerializeField] protected int m_InitialLifePoints = 4;           // The number of shots the object needs to receive before exploting
         [SerializeField] private Color m_HitColor = Color.red;          // The color of the object when hit.
@@ -68,12 +68,22 @@ namespace VRStandardAssets.ShootingGallery
         {
             get
             {
-                return m_TargetSpeed;
+                if (OverrideTargetSpeed.HasValue)
+                {
+                    return OverrideTargetSpeed.Value;
+                }
+
+                return m_DefaultTargetSpeed;
             }
 
             set
             {
-                m_TargetSpeed = value;
+                if (OverrideTargetSpeed.HasValue)
+                {
+                    OverrideTargetSpeed = value;
+                }
+
+                m_DefaultTargetSpeed = value;
             }
         }
 
@@ -90,6 +100,7 @@ namespace VRStandardAssets.ShootingGallery
             }
         }
 
+        public float? OverrideTargetSpeed { get; set; }
 
         public void Pause()
         {
@@ -171,6 +182,7 @@ namespace VRStandardAssets.ShootingGallery
 
         public override void Restart ()
         {
+            OverrideTargetSpeed = null;
             m_IsPaused = false;
 
             // Pick one of the meshes from mesh collection
