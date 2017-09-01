@@ -28,7 +28,7 @@ public class WaveSelectionController : MonoBehaviour {
     {
         m_pressedButton = null;
 
-        for (int wave = SessionData.WaveCount; wave > 0; wave--)
+        for (int wave = SessionData.MaxWavePlayed; wave > 0; wave--)
         {
             var newButton = Instantiate(m_VRButonPrefab);
             var vrButton = newButton.GetComponent<VRButton>();

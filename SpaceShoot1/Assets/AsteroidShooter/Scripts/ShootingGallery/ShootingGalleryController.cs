@@ -288,8 +288,10 @@ namespace VRStandardAssets.ShootingGallery
             m_TargetSequence = currentWave.TargetSequence.GetEnumerator();
             m_TargetSequence.MoveNext();
 
-            SessionData.Level = currentLevel.LevelNumber;
-            SessionData.WaveCount = currentWave.WaveNumber;
+            SessionData.MaxLevelPlayed = SessionData.MaxLevelPlayed >= currentLevel.LevelNumber ? 
+                SessionData.MaxLevelPlayed : currentLevel.LevelNumber;
+            SessionData.MaxWavePlayed = SessionData.MaxWavePlayed >= currentWave.WaveNumber ? 
+                SessionData.MaxWavePlayed : currentWave.WaveNumber;
             SessionData.MinScoreToPassWave = currentWave.MinScoreToPass;
         }
 

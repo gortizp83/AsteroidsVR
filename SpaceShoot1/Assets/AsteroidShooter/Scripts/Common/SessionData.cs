@@ -29,7 +29,7 @@ namespace VRStandardAssets.Common
 
         public static GameScore Score { get { return s_Score; } }
 
-        public static int WaveCount
+        public static int MaxWavePlayed
         {
             get
             {
@@ -55,7 +55,7 @@ namespace VRStandardAssets.Common
             }
         }
 
-        public static int Level
+        public static int MaxLevelPlayed
         {
             get
             {
