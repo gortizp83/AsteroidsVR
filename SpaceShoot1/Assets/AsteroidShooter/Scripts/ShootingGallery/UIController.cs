@@ -16,7 +16,7 @@ namespace VRStandardAssets.ShootingGallery
         [SerializeField] private UIFader m_IntroUI;     // This controls fading the UI shown during the intro.
         [SerializeField] private UIFader m_OutroUI;     // This controls fading the UI shown during the outro.
         [SerializeField] private Text m_OutroUIMessage;
-        [SerializeField] private UIFader m_PlayerUI;    // This controls fading the UI that shows around the gun that moves with the player.
+        [SerializeField] private UIFader m_ScoreBoardUI;    // This controls fading the UI that shows around the gun that moves with the player.
         [SerializeField] private UIFader m_EndOfWaveUI;
         [SerializeField] private Text m_EndOfWaveMessage;      // Reference to the Text component that displays the end of wave message
         [SerializeField] private UIFader m_GamePausedUI;
@@ -54,14 +54,14 @@ namespace VRStandardAssets.ShootingGallery
             yield return StartCoroutine(m_OutroUI.InteruptAndFadeOut());
         }
 
-        public IEnumerator ShowPlayerUI ()
+        public IEnumerator ShowScoreBoardUI ()
         {
-            yield return StartCoroutine (m_PlayerUI.InteruptAndFadeIn ());
+            yield return StartCoroutine (m_ScoreBoardUI.InteruptAndFadeIn ());
         }
 
-        public IEnumerator HidePlayerUI ()
+        public IEnumerator HideScoreBoardUI ()
         {
-            yield return StartCoroutine (m_PlayerUI.InteruptAndFadeOut ());
+            yield return StartCoroutine (m_ScoreBoardUI.InteruptAndFadeOut ());
         }
 
         public IEnumerator ShowGamePausedUI()

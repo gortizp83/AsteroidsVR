@@ -29,6 +29,7 @@ namespace VRStandardAssets.ShootingGallery
         [SerializeField] private InputWarnings m_InputWarnings;         // Tap warnings need to be on for the intro and outro but off for the game itself.
         [SerializeField] private GameConfiguration m_GameConfiguration;
         [SerializeField] private VRInput m_VRInput;
+        [SerializeField] private GapstopController m_GapstopController;
 
         private float m_SpawnProbability;                               // The current probability that a target will spawn at the next interval.
         private float m_ProbabilityDelta;                               // The difference to the probability caused by a target spawning or despawning.
@@ -38,6 +39,7 @@ namespace VRStandardAssets.ShootingGallery
         private Coroutine m_WaitForWaveSalection = null;
 
         private GameStateMachine m_GameStateMachine = new GameStateMachine();
+        private PhaseResult m_lastWaveResult;
 
         // Whether or not the game is currently playing.
         public bool IsPlaying
@@ -124,7 +126,8 @@ namespace VRStandardAssets.ShootingGallery
                 m_OutstandingTargets[i].Pause();
             }
 
-            yield return StartCoroutine(m_UIController.HidePlayerUI());
+            yield return StartCoroutine(m_UIController.HideScoreBoardUI());
+            yield return StartCoroutine(m_GapstopController.Hide());
 
             // In order, wait for the outro UI to fade in then wait for an additional delay.
             yield return StartCoroutine(m_UIController.ShowGamePausedUI());
@@ -148,7 +151,8 @@ namespace VRStandardAssets.ShootingGallery
 
         private IEnumerator ResumeGame()
         {
-            yield return StartCoroutine(m_UIController.ShowPlayerUI());
+            yield return StartCoroutine(m_UIController.ShowScoreBoardUI());
+            yield return StartCoroutine(m_GapstopController.Show());
 
             m_Reticle.Show();
             m_SelectionRadial.Hide();
@@ -185,9 +189,11 @@ namespace VRStandardAssets.ShootingGallery
             StopCoroutine("GameStartWave");
             StopCoroutine("GamePlayWave");
             StopCoroutine("GameEndWave");
+            StopCoroutine("PlayTrainingSession");
             StopCoroutine("PlayUpdate");
             yield return StartCoroutine(m_UIController.HideGamePausedUI());
-            yield return StartCoroutine(m_UIController.HidePlayerUI());
+            yield return StartCoroutine(m_UIController.HideScoreBoardUI());
+            yield return StartCoroutine(m_GapstopController.Hide());
 
 
             // Show VR buttons
@@ -229,35 +235,39 @@ namespace VRStandardAssets.ShootingGallery
         private IEnumerator GamePlayWave ()
         {
             // Wait for the UI on the player's gun to fade in.
-            yield return StartCoroutine(m_UIController.ShowPlayerUI());
+            yield return StartCoroutine(m_UIController.ShowScoreBoardUI());
+            yield return StartCoroutine(m_GapstopController.Show());
 
             // Make sure the reticle is being shown.
             m_Reticle.Show ();
 
             // Reset the score.
-            SessionData.Restart ();
+            SessionData.Restart();
+
+            yield return StartCoroutine(PlayTrainingSession());
 
             // Wait for the play updates to finish.
-            yield return StartCoroutine (PlayUpdate ());
+            yield return StartCoroutine (PlayUpdate());
         }
 
         private IEnumerator GameEndWave ()
         {
             // TODO: send stats to ensure the player passed or failed the wave
-            PhaseResult result = m_GameConfiguration.FinishPhase(SessionData.Score);
+            m_lastWaveResult = m_GameConfiguration.FinishPhase(SessionData.Score);
 
             SessionData.SaveGame();
 
             // Wait for the UI on the player's gun to fade out.
-            yield return StartCoroutine(m_UIController.HidePlayerUI());
+            yield return StartCoroutine(m_UIController.HideScoreBoardUI());
+            yield return StartCoroutine(m_GapstopController.Hide());
 
-            if (!result.Pass || result.IsGameEnd)
+            if (!m_lastWaveResult.Pass || m_lastWaveResult.IsGameEnd)
             {
                 // Hide the reticle since the radial is about to be used.
                 m_Reticle.Hide();
 
                 // In order, wait for the outro UI to fade in then wait for an additional delay.
-                yield return StartCoroutine(m_UIController.ShowOutroUI(result.Message));
+                yield return StartCoroutine(m_UIController.ShowOutroUI(m_lastWaveResult.Message));
                 yield return new WaitForSeconds(m_EndDelay);
 
                 // Turn on the tap warnings.
@@ -275,7 +285,7 @@ namespace VRStandardAssets.ShootingGallery
             }
             else
             {
-                yield return StartCoroutine(m_UIController.ShowEndOfWaveUI(result.Message));
+                yield return StartCoroutine(m_UIController.ShowEndOfWaveUI(m_lastWaveResult.Message));
                 yield return new WaitForSeconds(0.5f);
                 yield return StartCoroutine(m_UIController.HideEndOfWaveUI());
             }
@@ -293,6 +303,28 @@ namespace VRStandardAssets.ShootingGallery
             SessionData.MaxWavePlayed = SessionData.MaxWavePlayed >= currentWave.WaveNumber ? 
                 SessionData.MaxWavePlayed : currentWave.WaveNumber;
             SessionData.MinScoreToPassWave = currentWave.MinScoreToPass;
+        }
+
+        private IEnumerator PlayTrainingSession()
+        {
+            // Get a reference to a target instance from the object pool.
+            GameObject target = m_TargetObjectPool.GetGameObjectFromPool(TargetType.Medium);
+            target.transform.position = new Vector3(0, 0, 10);
+
+            // Find a reference to the ShootingTarget script on the target gameobject and call it's Restart function.
+            ShootingTarget shootingTarget = target.GetComponent<ShootingTarget>();
+            shootingTarget.Restart();
+            shootingTarget.OverrideTargetSpeed = 0;
+
+            // Subscribe to the OnRemove event.
+            shootingTarget.OnRemove += HandleTargetRemoved;
+
+            m_OutstandingTargets.Add(shootingTarget);
+
+            while(m_OutstandingTargets.Count > 0)
+            {
+                yield return null;
+            }
         }
 
         private IEnumerator PlayUpdate ()

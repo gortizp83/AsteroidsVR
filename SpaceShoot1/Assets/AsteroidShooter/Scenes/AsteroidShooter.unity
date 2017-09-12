@@ -271,6 +271,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 99136445}
+  - component: {fileID: 99136446}
   m_Layer: 0
   m_Name: ScoreBoard
   m_TagString: Untagged
@@ -285,15 +286,31 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 99136444}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: -1.5, z: -0.3}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 958847503}
   - {fileID: 2025397186}
   - {fileID: 1810663752}
-  m_Father: {fileID: 1547223636}
-  m_RootOrder: 0
+  m_Father: {fileID: 752797877}
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &99136446
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 99136444}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 36ec501a8570e3f469a983e6ba4c11aa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_FadeSpeed: 1
+  m_GroupsToFade:
+  - {fileID: 958847504}
+  - {fileID: 2025397182}
+  - {fileID: 1810663754}
 --- !u!1 &163866252
 GameObject:
   m_ObjectHideFlags: 0
@@ -336,6 +353,7 @@ MonoBehaviour:
   m_InputWarnings: {fileID: 1265359672}
   m_GameConfiguration: {fileID: 646331186}
   m_VRInput: {fileID: 2046500880}
+  m_GapstopController: {fileID: 520928584}
 --- !u!4 &163866254
 Transform:
   m_ObjectHideFlags: 0
@@ -1025,6 +1043,7 @@ GameObject:
   m_Component:
   - component: {fileID: 520928583}
   - component: {fileID: 520928584}
+  - component: {fileID: 520928585}
   m_Layer: 0
   m_Name: WeaponPowerRing
   m_TagString: Untagged
@@ -1062,6 +1081,22 @@ MonoBehaviour:
   m_slider:
   - {fileID: 814326904}
   - {fileID: 251841217}
+  m_powerRingFader: {fileID: 520928585}
+--- !u!114 &520928585
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 520928582}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 36ec501a8570e3f469a983e6ba4c11aa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_FadeSpeed: 0.1
+  m_GroupsToFade:
+  - {fileID: 814326907}
+  - {fileID: 251841220}
 --- !u!1 &566048698
 GameObject:
   m_ObjectHideFlags: 0
@@ -1568,6 +1603,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1494584179}
+  - {fileID: 99136445}
   m_Father: {fileID: 163866254}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1585,7 +1621,7 @@ MonoBehaviour:
   m_IntroUI: {fileID: 930569737}
   m_OutroUI: {fileID: 745474211}
   m_OutroUIMessage: {fileID: 1600330413}
-  m_PlayerUI: {fileID: 1224565614}
+  m_ScoreBoardUI: {fileID: 99136446}
   m_EndOfWaveUI: {fileID: 1371043124}
   m_EndOfWaveMessage: {fileID: 1239895049}
   m_GamePausedUI: {fileID: 1746345054}
@@ -2769,7 +2805,6 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 769946608}
-  - {fileID: 1547223636}
   m_Father: {fileID: 0}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -4141,35 +4176,6 @@ Prefab:
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: ad9d8e2e1e1e6774bab6f142ed0c6f51, type: 2}
   m_IsPrefabParent: 0
---- !u!1 &1547223635
-GameObject:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  serializedVersion: 5
-  m_Component:
-  - component: {fileID: 1547223636}
-  m_Layer: 0
-  m_Name: GUI
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1547223636
-Transform:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1547223635}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children:
-  - {fileID: 99136445}
-  m_Father: {fileID: 1054689343}
-  m_RootOrder: 1
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1600330412
 GameObject:
   m_ObjectHideFlags: 0
@@ -5234,7 +5240,7 @@ ParticleSystem:
   moveWithTransform: 1
   moveWithCustomTransform: {fileID: 0}
   scalingMode: 2
-  randomSeed: 198205300
+  randomSeed: -58512319
   InitialModule:
     serializedVersion: 3
     enabled: 1
@@ -8811,7 +8817,7 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 10, y: 40, z: 20}
+  m_Size: {x: 13.31, y: 40.2, z: 42.4}
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!224 &2119098626 stripped
 RectTransform:

@@ -140,7 +140,6 @@ namespace VRStandardAssets.ShootingGallery
         public override void DoUpdate()
         {
             this.transform.Translate(ForwardDirection * Time.deltaTime * TargetSpeed);
-
             this.transform.localScale = new Vector3(m_SpawnScale, m_SpawnScale, m_SpawnScale);
 
             if (this.transform.position.z < 0)
