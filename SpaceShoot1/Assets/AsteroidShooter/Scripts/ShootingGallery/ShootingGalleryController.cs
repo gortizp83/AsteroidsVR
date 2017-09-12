@@ -29,6 +29,7 @@ namespace VRStandardAssets.ShootingGallery
         [SerializeField] private InputWarnings m_InputWarnings;         // Tap warnings need to be on for the intro and outro but off for the game itself.
         [SerializeField] private GameConfiguration m_GameConfiguration;
         [SerializeField] private VRInput m_VRInput;
+        [SerializeField] private GapstopController m_GapstopController;
 
         private float m_SpawnProbability;                               // The current probability that a target will spawn at the next interval.
         private float m_ProbabilityDelta;                               // The difference to the probability caused by a target spawning or despawning.
@@ -124,7 +125,8 @@ namespace VRStandardAssets.ShootingGallery
                 m_OutstandingTargets[i].Pause();
             }
 
-            yield return StartCoroutine(m_UIController.HidePlayerUI());
+            yield return StartCoroutine(m_UIController.HideScoreBoardUI());
+            yield return StartCoroutine(m_GapstopController.HideAllGapstops());
 
             // In order, wait for the outro UI to fade in then wait for an additional delay.
             yield return StartCoroutine(m_UIController.ShowGamePausedUI());
@@ -148,7 +150,8 @@ namespace VRStandardAssets.ShootingGallery
 
         private IEnumerator ResumeGame()
         {
-            yield return StartCoroutine(m_UIController.ShowPlayerUI());
+            yield return StartCoroutine(m_UIController.ShowScoreBoardUI());
+            yield return StartCoroutine(m_GapstopController.ShowAllGapstops());
 
             m_Reticle.Show();
             m_SelectionRadial.Hide();
@@ -187,7 +190,8 @@ namespace VRStandardAssets.ShootingGallery
             StopCoroutine("GameEndWave");
             StopCoroutine("PlayUpdate");
             yield return StartCoroutine(m_UIController.HideGamePausedUI());
-            yield return StartCoroutine(m_UIController.HidePlayerUI());
+            yield return StartCoroutine(m_UIController.HideScoreBoardUI());
+            yield return StartCoroutine(m_GapstopController.HideAllGapstops());
 
 
             // Show VR buttons
@@ -229,7 +233,8 @@ namespace VRStandardAssets.ShootingGallery
         private IEnumerator GamePlayWave ()
         {
             // Wait for the UI on the player's gun to fade in.
-            yield return StartCoroutine(m_UIController.ShowPlayerUI());
+            yield return StartCoroutine(m_UIController.ShowScoreBoardUI());
+            yield return StartCoroutine(m_GapstopController.ShowAllGapstops());
 
             // Make sure the reticle is being shown.
             m_Reticle.Show ();
@@ -249,7 +254,8 @@ namespace VRStandardAssets.ShootingGallery
             SessionData.SaveGame();
 
             // Wait for the UI on the player's gun to fade out.
-            yield return StartCoroutine(m_UIController.HidePlayerUI());
+            yield return StartCoroutine(m_UIController.HideScoreBoardUI());
+            yield return StartCoroutine(m_GapstopController.HideAllGapstops());
 
             if (!result.Pass || result.IsGameEnd)
             {

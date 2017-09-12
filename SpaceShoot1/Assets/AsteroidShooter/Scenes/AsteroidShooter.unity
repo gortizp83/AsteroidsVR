@@ -336,6 +336,7 @@ MonoBehaviour:
   m_InputWarnings: {fileID: 1265359672}
   m_GameConfiguration: {fileID: 646331186}
   m_VRInput: {fileID: 2046500880}
+  m_GapstopController: {fileID: 520928584}
 --- !u!4 &163866254
 Transform:
   m_ObjectHideFlags: 0
@@ -1025,6 +1026,7 @@ GameObject:
   m_Component:
   - component: {fileID: 520928583}
   - component: {fileID: 520928584}
+  - component: {fileID: 520928585}
   m_Layer: 0
   m_Name: WeaponPowerRing
   m_TagString: Untagged
@@ -1062,6 +1064,22 @@ MonoBehaviour:
   m_slider:
   - {fileID: 814326904}
   - {fileID: 251841217}
+  m_gapstopFader: {fileID: 520928585}
+--- !u!114 &520928585
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 520928582}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 36ec501a8570e3f469a983e6ba4c11aa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_FadeSpeed: 10
+  m_GroupsToFade:
+  - {fileID: 814326907}
+  - {fileID: 251841220}
 --- !u!1 &566048698
 GameObject:
   m_ObjectHideFlags: 0
@@ -1585,7 +1603,7 @@ MonoBehaviour:
   m_IntroUI: {fileID: 930569737}
   m_OutroUI: {fileID: 745474211}
   m_OutroUIMessage: {fileID: 1600330413}
-  m_PlayerUI: {fileID: 1224565614}
+  m_ScoreboardUI: {fileID: 1224565614}
   m_EndOfWaveUI: {fileID: 1371043124}
   m_EndOfWaveMessage: {fileID: 1239895049}
   m_GamePausedUI: {fileID: 1746345054}
@@ -2943,8 +2961,6 @@ MonoBehaviour:
   - {fileID: 958847504}
   - {fileID: 2025397182}
   - {fileID: 1810663754}
-  - {fileID: 814326907}
-  - {fileID: 251841220}
 --- !u!1 &1226218089
 GameObject:
   m_ObjectHideFlags: 0

@@ -12,14 +12,21 @@ public class GapstopController : MonoBehaviour {
     [SerializeField]
     private BigFireSlider[] m_slider;
 
+    [SerializeField]
+    private UIFader m_gapstopFader;
+
     public event Action<int> OnGapstopFilled;
     private List<Coroutine> m_WaitForBarToFillCorroutines = new List<Coroutine>();
     int m_GapstopCount = 0;
 
-    // Use this for initialization
-    void Start ()
+    public IEnumerator ShowAllGapstops()
     {
-        //m_slider = this.GetComponentsInChildren<BigFireSlider>();
+        yield return StartCoroutine(m_gapstopFader.InteruptAndFadeIn());
+    }
+
+    public IEnumerator HideAllGapstops()
+    {
+        yield return StartCoroutine(m_gapstopFader.InteruptAndFadeOut());
     }
 
     private void OnEnable()
