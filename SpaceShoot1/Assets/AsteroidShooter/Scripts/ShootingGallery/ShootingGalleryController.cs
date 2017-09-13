@@ -223,7 +223,16 @@ namespace VRStandardAssets.ShootingGallery
                 target.Resume();
             }
 
-            UpdateLevelInfo();
+            var currentLevel = m_GameConfiguration.GetCurrentLevel();
+            m_currentWaveConfiguration = currentLevel.GetCurrentWave();
+            m_TargetSequence = m_currentWaveConfiguration.TargetSequence.GetEnumerator();
+            m_TargetSequence.MoveNext();
+
+            SessionData.MaxLevelPlayed = SessionData.MaxLevelPlayed >= currentLevel.LevelNumber ?
+                SessionData.MaxLevelPlayed : currentLevel.LevelNumber;
+            SessionData.MaxWavePlayed = SessionData.MaxWavePlayed >= m_currentWaveConfiguration.WaveNumber ?
+                SessionData.MaxWavePlayed : m_currentWaveConfiguration.WaveNumber;
+            SessionData.MinScoreToPassWave = m_currentWaveConfiguration.MinScoreToPass;
 
             // Turn off the tap warnings since it will now be tap to fire.
             m_InputWarnings.TurnOffDoubleTapWarnings ();
@@ -316,20 +325,6 @@ namespace VRStandardAssets.ShootingGallery
                 // Wait to see if the training target has been destroyed
                 yield return null;
             }
-        }
-
-        private void UpdateLevelInfo()
-        {
-            var currentLevel = m_GameConfiguration.GetCurrentLevel();
-            m_currentWaveConfiguration = currentLevel.GetCurrentWave();
-            m_TargetSequence = m_currentWaveConfiguration.TargetSequence.GetEnumerator();
-            m_TargetSequence.MoveNext();
-
-            SessionData.MaxLevelPlayed = SessionData.MaxLevelPlayed >= currentLevel.LevelNumber ? 
-                SessionData.MaxLevelPlayed : currentLevel.LevelNumber;
-            SessionData.MaxWavePlayed = SessionData.MaxWavePlayed >= m_currentWaveConfiguration.WaveNumber ? 
-                SessionData.MaxWavePlayed : m_currentWaveConfiguration.WaveNumber;
-            SessionData.MinScoreToPassWave = m_currentWaveConfiguration.MinScoreToPass;
         }
 
         private IEnumerator PlayUpdate ()
