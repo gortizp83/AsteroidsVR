@@ -337,6 +337,7 @@ MonoBehaviour:
   m_GameConfiguration: {fileID: 646331186}
   m_VRInput: {fileID: 2046500880}
   m_GapstopController: {fileID: 520928584}
+  m_WeaponController: {fileID: 1054689342}
 --- !u!4 &163866254
 Transform:
   m_ObjectHideFlags: 0
@@ -5250,7 +5251,7 @@ ParticleSystem:
   moveWithTransform: 1
   moveWithCustomTransform: {fileID: 0}
   scalingMode: 2
-  randomSeed: 198205300
+  randomSeed: 1418280702
   InitialModule:
     serializedVersion: 3
     enabled: 1

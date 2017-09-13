@@ -30,6 +30,7 @@ namespace VRStandardAssets.ShootingGallery
         [SerializeField] private GameConfiguration m_GameConfiguration;
         [SerializeField] private VRInput m_VRInput;
         [SerializeField] private GapstopController m_GapstopController;
+        [SerializeField] private ShootingGalleryGun m_WeaponController;
 
         private float m_SpawnProbability;                               // The current probability that a target will spawn at the next interval.
         private float m_ProbabilityDelta;                               // The difference to the probability caused by a target spawning or despawning.
@@ -321,11 +322,21 @@ namespace VRStandardAssets.ShootingGallery
 
             m_OutstandingTargets.Add(shootingTarget);
 
+            m_WeaponController.DisableSingleShot();
+            // Turn on the tap warnings for the training session.
+            m_InputWarnings.TurnOnDoubleTapWarnings();
+            m_InputWarnings.TurnOnSingleTapWarnings();
+
             while (m_OutstandingTargets.Count > 0)
             {
                 // Wait to see if the training target has been destroyed
                 yield return null;
             }
+
+            m_WeaponController.DisableSingleShot();
+            // Turn on the tap warnings for the selection slider.
+            m_InputWarnings.TurnOffDoubleTapWarnings();
+            m_InputWarnings.TurnOffSingleTapWarnings();
         }
 
         private IEnumerator PlayUpdate ()

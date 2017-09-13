@@ -31,6 +31,16 @@ namespace VRStandardAssets.ShootingGallery
         private AnimationCurve m_GunFlare8xShotWidthCurve;
         private AudioClip m_GunOriginalClip;
         private int m_FireDamageValue = 1;
+        private bool m_isSingleShotEnabled = true;
+        public void DisableSingleShot()
+        {
+            m_isSingleShotEnabled = false;
+        }
+
+        public void EnableSingleShot()
+        {
+            m_isSingleShotEnabled = true;
+        }
 
         private void Awake()
         {
@@ -92,8 +102,11 @@ namespace VRStandardAssets.ShootingGallery
 
         private void HandleDown ()
         {
-            m_FireDamageValue = 1;
-            ExecuteFire();
+            if (m_isSingleShotEnabled)
+            {
+                m_FireDamageValue = 1;
+                ExecuteFire();
+            }
         }
 
         private void HandleUp()
