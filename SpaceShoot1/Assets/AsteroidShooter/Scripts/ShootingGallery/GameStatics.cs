@@ -29,7 +29,9 @@ internal class GameStatics
         GameScore gameScore2 = new GameScore();
         gameScore2.SetScore(TargetType.Easy, 10);
         gameScore2.SetScore(TargetType.Medium, 5);
-        level1.WaveConfig.Add(new WaveConfiguration(waveCounter++, gameScore2, wave2));
+        WaveConfiguration wave2Configuration = new WaveConfiguration(waveCounter++, gameScore2, wave2);
+        wave2Configuration.WaveTrainingConfiguration = TargetType.Medium;
+        level1.WaveConfig.Add(wave2Configuration);
 
         // Wave 3
         List<SequenceCofig> targetConfig2 = new List<SequenceCofig>();
