@@ -39,6 +39,7 @@ namespace VRStandardAssets.ShootingGallery
         private Coroutine m_WaitForWaveSalection = null;
 
         private GameStateMachine m_GameStateMachine = new GameStateMachine();
+        private readonly Vector3 c_DefaultPositionTrainingTarget = new Vector3(0,0,10);
 
         // Whether or not the game is currently playing.
         public bool IsPlaying
@@ -188,6 +189,7 @@ namespace VRStandardAssets.ShootingGallery
             StopCoroutine("GameStartWave");
             StopCoroutine("GamePlayWave");
             StopCoroutine("GameEndWave");
+            StopCoroutine("PlayTrainingSession");
             StopCoroutine("PlayUpdate");
             yield return StartCoroutine(m_UIController.HideGamePausedUI());
             yield return StartCoroutine(m_UIController.HideScoreBoardUI());
@@ -242,6 +244,9 @@ namespace VRStandardAssets.ShootingGallery
             // Reset the score.
             SessionData.Restart ();
 
+            // TODO: only show the training session once. For now show always
+            yield return StartCoroutine(PlayTrainingSession());
+
             // Wait for the play updates to finish.
             yield return StartCoroutine (PlayUpdate ());
         }
@@ -284,6 +289,29 @@ namespace VRStandardAssets.ShootingGallery
                 yield return StartCoroutine(m_UIController.ShowEndOfWaveUI(result.Message));
                 yield return new WaitForSeconds(0.5f);
                 yield return StartCoroutine(m_UIController.HideEndOfWaveUI());
+            }
+        }
+
+        private IEnumerator PlayTrainingSession()
+        {
+            // Get a reference to a target instance from the object pool
+            GameObject target = m_TargetObjectPool.GetGameObjectFromPool(TargetType.Medium);
+            target.transform.position = c_DefaultPositionTrainingTarget;
+
+            // Ensure the training target is not moving and is in it's initial state
+            ShootingTarget shootingTarget = target.GetComponent<ShootingTarget>();
+            shootingTarget.Restart();
+            shootingTarget.OverrideTargetSpeed = 0;
+
+            // Subscribe to the OnRemove event
+            shootingTarget.OnRemove += HandleTargetRemoved;
+
+            m_OutstandingTargets.Add(shootingTarget);
+
+            while (m_OutstandingTargets.Count > 0)
+            {
+                // Wait to see if the training target has been destroyed
+                yield return null;
             }
         }
 
