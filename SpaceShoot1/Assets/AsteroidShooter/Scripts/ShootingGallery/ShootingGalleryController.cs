@@ -40,6 +40,7 @@ namespace VRStandardAssets.ShootingGallery
 
         private GameStateMachine m_GameStateMachine = new GameStateMachine();
         private readonly Vector3 c_DefaultPositionTrainingTarget = new Vector3(0,0,10);
+        private WaveConfiguration m_currentWaveConfiguration;
 
         // Whether or not the game is currently playing.
         public bool IsPlaying
@@ -244,8 +245,10 @@ namespace VRStandardAssets.ShootingGallery
             // Reset the score.
             SessionData.Restart();
 
-            // TODO: only show the training session once. For now show always
-            yield return StartCoroutine(PlayTrainingSession());
+            if (m_currentWaveConfiguration.WaveTrainingConfiguration.HasValue)
+            {
+                yield return StartCoroutine(PlayTrainingSession(m_currentWaveConfiguration.WaveTrainingConfiguration.Value));
+            }
 
             // Wait for the play updates to finish.
             yield return StartCoroutine (PlayUpdate ());
@@ -292,10 +295,10 @@ namespace VRStandardAssets.ShootingGallery
             }
         }
 
-        private IEnumerator PlayTrainingSession()
+        private IEnumerator PlayTrainingSession(TargetType trainingTargetType)
         {
             // Get a reference to a target instance from the object pool
-            GameObject target = m_TargetObjectPool.GetGameObjectFromPool(TargetType.Medium);
+            GameObject target = m_TargetObjectPool.GetGameObjectFromPool(trainingTargetType);
             target.transform.position = c_DefaultPositionTrainingTarget;
 
             // Ensure the training target is not moving and is in it's initial state
@@ -318,15 +321,15 @@ namespace VRStandardAssets.ShootingGallery
         private void UpdateLevelInfo()
         {
             var currentLevel = m_GameConfiguration.GetCurrentLevel();
-            var currentWave = currentLevel.GetCurrentWave();
-            m_TargetSequence = currentWave.TargetSequence.GetEnumerator();
+            m_currentWaveConfiguration = currentLevel.GetCurrentWave();
+            m_TargetSequence = m_currentWaveConfiguration.TargetSequence.GetEnumerator();
             m_TargetSequence.MoveNext();
 
             SessionData.MaxLevelPlayed = SessionData.MaxLevelPlayed >= currentLevel.LevelNumber ? 
                 SessionData.MaxLevelPlayed : currentLevel.LevelNumber;
-            SessionData.MaxWavePlayed = SessionData.MaxWavePlayed >= currentWave.WaveNumber ? 
-                SessionData.MaxWavePlayed : currentWave.WaveNumber;
-            SessionData.MinScoreToPassWave = currentWave.MinScoreToPass;
+            SessionData.MaxWavePlayed = SessionData.MaxWavePlayed >= m_currentWaveConfiguration.WaveNumber ? 
+                SessionData.MaxWavePlayed : m_currentWaveConfiguration.WaveNumber;
+            SessionData.MinScoreToPassWave = m_currentWaveConfiguration.MinScoreToPass;
         }
 
         private IEnumerator PlayUpdate ()
