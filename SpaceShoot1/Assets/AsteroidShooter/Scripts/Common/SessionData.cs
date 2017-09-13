@@ -8,14 +8,6 @@ namespace VRStandardAssets.Common
     // the highscores to PlayerPrefs.
     public static class SessionData
     {
-        // This enum shows all the types of games that use scores.
-        public enum GameType
-        {
-            FLYER,
-            SHOOTER180,
-            SHOOTER360
-        };
-
         private const string k_LastWave ="waveData";
         private const string k_LastLevel = "levelData";
 

@@ -242,7 +242,7 @@ namespace VRStandardAssets.ShootingGallery
             m_Reticle.Show ();
 
             // Reset the score.
-            SessionData.Restart ();
+            SessionData.Restart();
 
             // TODO: only show the training session once. For now show always
             yield return StartCoroutine(PlayTrainingSession());
