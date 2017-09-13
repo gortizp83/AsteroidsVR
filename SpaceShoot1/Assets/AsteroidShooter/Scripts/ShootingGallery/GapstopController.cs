@@ -16,8 +16,28 @@ public class GapstopController : MonoBehaviour {
     private UIFader m_gapstopFader;
 
     public event Action<int> OnGapstopFilled;
+
+    public int MaxPowerRingsToFill
+    {
+        get
+        {
+            return m_MaxGapstopsToFill;
+        }
+
+        set
+        {
+            m_MaxGapstopsToFill = value > m_slider.Length ? m_slider.Length : value;
+        }
+    }
+
     private List<Coroutine> m_WaitForBarToFillCorroutines = new List<Coroutine>();
-    int m_GapstopCount = 0;
+    private int m_GapstopCount = 0;
+    private int m_MaxGapstopsToFill;
+
+    private void Start()
+    {
+        MaxPowerRingsToFill = m_slider.Length;
+    }
 
     public IEnumerator ShowAllGapstops()
     {
@@ -59,8 +79,10 @@ public class GapstopController : MonoBehaviour {
 
     private IEnumerator StartFill()
     {
-        foreach (var slider in m_slider)
+        for (int i = 0; i < MaxPowerRingsToFill; i++)
         {
+            var slider = m_slider[i];
+
             slider.enabled = true;
             slider.StartFilling();
             var cr = StartCoroutine(slider.WaitForBarToFill());

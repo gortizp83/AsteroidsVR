@@ -25,6 +25,7 @@ public class WaveConfiguration
     private void InitializeWaveConfiguration()
     {
         WaveTrainingConfiguration = null;
+        MaxPowerRingsToFill = 2;
     }
 
     public int WaveNumber { get; set; }
@@ -34,6 +35,8 @@ public class WaveConfiguration
     public List<TargetConfiguration> TargetSequence { get; set; }
 
     public TargetType? WaveTrainingConfiguration {get; set;}
+
+    public int MaxPowerRingsToFill { get; set; }
 
     private GameScore CalculateMinScoreToPass(List<TargetConfiguration> targetSequence)
     {

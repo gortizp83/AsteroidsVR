@@ -244,6 +244,7 @@ namespace VRStandardAssets.ShootingGallery
 
         private IEnumerator GamePlayWave ()
         {
+            m_GapstopController.MaxPowerRingsToFill = m_currentWaveConfiguration.MaxPowerRingsToFill;
             // Wait for the UI on the player's gun to fade in.
             yield return StartCoroutine(m_UIController.ShowScoreBoardUI());
             yield return StartCoroutine(m_GapstopController.ShowAllGapstops());

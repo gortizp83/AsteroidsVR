@@ -15,11 +15,15 @@ internal class GameStatics
         // Level 1
         LevelConfiguration level1 = new LevelConfiguration(levelCount++);
 
-        // Wave 1
-        List<TargetConfiguration> wave1 = GenerateTargetSequence(10, TargetType.Easy);
-        GameScore gameScore1 = new GameScore();
-        gameScore1.SetScore(TargetType.Easy, 10);
-        level1.WaveConfig.Add(new WaveConfiguration(waveCounter++, gameScore1, wave1));
+        {
+            // Wave 1
+            List<TargetConfiguration> wave1 = GenerateTargetSequence(10, TargetType.Easy);
+            GameScore gameScore1 = new GameScore();
+            gameScore1.SetScore(TargetType.Easy, 10);
+            var wave1Config = new WaveConfiguration(waveCounter++, gameScore1, wave1);
+            wave1Config.MaxPowerRingsToFill = 0;
+            level1.WaveConfig.Add(wave1Config);
+        }
 
         // Wave 2
         List<SequenceCofig> squenceConfig = new List<SequenceCofig>();
@@ -31,6 +35,7 @@ internal class GameStatics
         gameScore2.SetScore(TargetType.Medium, 5);
         WaveConfiguration wave2Configuration = new WaveConfiguration(waveCounter++, gameScore2, wave2);
         wave2Configuration.WaveTrainingConfiguration = TargetType.Medium;
+        wave2Configuration.MaxPowerRingsToFill = 1;
         level1.WaveConfig.Add(wave2Configuration);
 
         // Wave 3
